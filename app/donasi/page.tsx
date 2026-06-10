@@ -3,6 +3,7 @@ import type { ReactNode, SVGProps } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { yoloLinks, yoloProfile } from "@/data/yolo";
+import type { Metadata } from "next";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -43,6 +44,12 @@ const donationSteps = [
   "Simpan bukti transfer atau screenshot pembayaran.",
   "Kirim bukti donasi ke admin YOLO melalui WhatsApp.",
 ];
+
+export const metadata: Metadata = {
+  title: "Donasi",
+  description:
+    "Dukung kegiatan pendidikan, sosial, dan pembinaan komunitas YOLO melalui donasi.",
+};
 
 export default function DonasiPage() {
   return (

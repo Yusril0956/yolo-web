@@ -3,15 +3,21 @@ import type { SVGProps } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
-  yoloLinks,
   yoloPrograms,
   yoloProfile,
   yoloVision,
 } from "@/data/yolo";
+import type { Metadata } from "next";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
 const featuredPrograms = yoloPrograms.slice(0, 4);
+
+export const metadata: Metadata = {
+  title: "Home",
+  description:
+    "YOLO adalah komunitas kepemudaan yang menjadi ruang tumbuh, bergerak, dan bermanfaat melalui kegiatan pendidikan dan sosial.",
+};
 
 export default function HomePage() {
   return (
@@ -21,10 +27,9 @@ export default function HomePage() {
       <HeroSection />
       <ProfilePreview />
       <VisionPreview />
-      <ProgramPreview />
       <ImpactSection />
-      <HomeCTA />
-
+      <ProgramPreview />
+      
       <Footer />
     </main>
   );
@@ -52,20 +57,21 @@ function HeroSection() {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
-              href={yoloLinks.join}
+              href="/kegiatan"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-7 py-4 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
             >
-              Gabung YOLO
+              Ikut Kegiatan
               <IconArrowRight className="h-5 w-5" />
             </Link>
 
             <Link
-              href="/program"
+              href="/donasi"
               className="inline-flex items-center justify-center rounded-full border-2 border-[#006399] bg-white px-7 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#e0e0ff]"
             >
-              Lihat Program
+              Donasi & Dukungan
+              <IconArrowRight className="h-5 w-5" />
             </Link>
           </div>
         </div>
@@ -246,42 +252,6 @@ function ImpactSection() {
               <p className="mt-2 font-semibold text-white/75">{item.label}</p>
             </div>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function HomeCTA() {
-  return (
-    <section className="bg-[#fbf8ff]">
-      <div className="mx-auto max-w-[1280px] px-4 py-20 md:px-16">
-        <div className="rounded-[2.5rem] bg-[#006399] p-8 text-white md:p-12">
-          <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
-            <div>
-              <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#95ccff]">
-                Ikut Bergerak
-              </p>
-
-              <h2 className="max-w-2xl text-3xl font-bold leading-tight md:text-4xl">
-                Mau tumbuh dan bermanfaat bersama YOLO?
-              </h2>
-
-              <p className="mt-4 max-w-2xl leading-8 text-white/80">
-                Hubungi admin YOLO untuk bergabung, bertanya tentang program,
-                atau ikut mendukung kegiatan sosial dan pendidikan.
-              </p>
-            </div>
-
-            <Link
-              href={yoloLinks.join}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 rounded-full bg-white px-8 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
-            >
-              Hubungi Admin
-            </Link>
-          </div>
         </div>
       </div>
     </section>

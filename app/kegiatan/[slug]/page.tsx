@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { SVGProps } from "react";
+import type { Metadata } from "next";
+import type { ReactNode, SVGProps } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SafeImage from "@/components/SafeImage";
 import { getYoloActivityBySlug } from "@/lib/notion";
 import { yoloLinks } from "@/data/yolo";
 
@@ -15,6 +17,41 @@ type PageProps = {
 };
 
 export const revalidate = 300;
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const activity = await getYoloActivityBySlug(slug);
+
+  if (!activity) {
+    return {
+      title: "Kegiatan Tidak Ditemukan",
+      description: "Kegiatan YOLO yang kamu cari belum tersedia.",
+    };
+  }
+
+  return {
+    title: activity.title,
+    description:
+      activity.description || "Detail kegiatan dan dokumentasi YOLO.",
+    openGraph: {
+      title: `${activity.title} | YOLO`,
+      description:
+        activity.description || "Detail kegiatan dan dokumentasi YOLO.",
+      images: activity.poster
+        ? [
+            {
+              url: activity.poster,
+              width: 1200,
+              height: 630,
+              alt: activity.title,
+            },
+          ]
+        : [],
+    },
+  };
+}
 
 export default async function KegiatanDetailPage({ params }: PageProps) {
   const { slug } = await params;
@@ -32,43 +69,32 @@ export default async function KegiatanDetailPage({ params }: PageProps) {
 
       <section className="bg-[#fbf8ff]">
         <div className="mx-auto max-w-[1280px] px-4 py-16 md:px-16 md:py-20">
-          <Link
-            href="/kegiatan"
-            className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-[#006399] transition hover:text-[#1da1f2]"
-          >
-            <IconArrowLeft className="h-4 w-4" />
-            Kembali ke Kegiatan
-          </Link>
+          <BackLink />
 
           <div className="grid gap-8 lg:grid-cols-[1fr_0.75fr]">
-            <div>
+            <div className="rounded-[2.5rem] bg-white p-6 shadow-sm ring-1 ring-[#e0e0ff] md:p-8">
               <div className="mb-5 flex flex-wrap gap-3">
-                <span className="rounded-full bg-[#cde5ff] px-4 py-2 text-xs font-bold text-[#006399]">
-                  {activity.category || "Kegiatan"}
-                </span>
-
-                <span className="rounded-full bg-[#91f78e] px-4 py-2 text-xs font-bold text-[#00731e]">
-                  {activity.status || "Published"}
-                </span>
+                <Badge>{activity.category || "Kegiatan"}</Badge>
+                <Badge variant="green">{activity.status || "Published"}</Badge>
               </div>
 
-              <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-[-0.02em] text-[#000767] md:text-5xl">
+              <h1 className="text-4xl font-bold leading-tight tracking-[-0.02em] text-[#000767] md:text-5xl">
                 {activity.title}
               </h1>
 
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-[#3f4851]">
+              <p className="mt-5 whitespace-pre-line text-lg leading-8 text-[#3f4851]">
                 {activity.description || "Deskripsi kegiatan belum tersedia."}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                <InfoCard
-                  icon={<IconCalendar className="h-6 w-6" />}
+                <InfoItem
+                  icon={<IconCalendar className="h-5 w-5" />}
                   label="Tanggal"
                   value={activity.date}
                 />
 
-                <InfoCard
-                  icon={<IconPin className="h-6 w-6" />}
+                <InfoItem
+                  icon={<IconPin className="h-5 w-5" />}
                   label="Lokasi"
                   value={activity.location || "Lokasi menyusul"}
                 />
@@ -110,24 +136,15 @@ export default async function KegiatanDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="rounded-[2.5rem] bg-white p-5 shadow-sm ring-1 ring-[#e0e0ff]">
+            <div className="rounded-[2.5rem] bg-white p-4 shadow-sm ring-1 ring-[#e0e0ff]">
               <div className="overflow-hidden rounded-[2rem] bg-[#f4f2ff]">
-                {activity.poster ? (
-                  <img
-                    src={activity.poster}
-                    alt={activity.title}
-                    className="h-[420px] w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-[420px] items-center justify-center p-8 text-center">
-                    <div>
-                      <IconImage className="mx-auto h-16 w-16 text-[#006399]" />
-                      <p className="mt-4 font-bold text-[#006399]">
-                        Poster belum tersedia
-                      </p>
-                    </div>
-                  </div>
-                )}
+                <SafeImage
+                  src={activity.poster}
+                  alt={activity.title}
+                  className="h-[420px] w-full object-cover"
+                  fallbackClassName="h-[420px] w-full"
+                  fallbackLabel="Poster belum tersedia"
+                />
               </div>
             </div>
           </div>
@@ -142,19 +159,50 @@ export default async function KegiatanDetailPage({ params }: PageProps) {
   );
 }
 
-function InfoCard({
+function BackLink() {
+  return (
+    <Link
+      href="/kegiatan"
+      className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-[#006399] transition hover:text-[#1da1f2]"
+    >
+      <IconArrowLeft className="h-4 w-4" />
+      Kembali ke Kegiatan
+    </Link>
+  );
+}
+
+function Badge({
+  children,
+  variant = "blue",
+}: {
+  children: ReactNode;
+  variant?: "blue" | "green";
+}) {
+  const className =
+    variant === "green"
+      ? "bg-[#91f78e] text-[#00731e]"
+      : "bg-[#cde5ff] text-[#006399]";
+
+  return (
+    <span className={`rounded-full px-4 py-2 text-xs font-bold ${className}`}>
+      {children}
+    </span>
+  );
+}
+
+function InfoItem({
   icon,
   label,
   value,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string;
 }) {
   return (
-    <div className="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-[#e0e0ff]">
+    <div className="rounded-[1.5rem] bg-[#fbf8ff] p-5 ring-1 ring-[#e0e0ff]">
       <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#cde5ff] text-[#006399]">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#cde5ff] text-[#006399]">
           {icon}
         </div>
 
@@ -178,18 +226,20 @@ function GallerySection({
   title: string;
 }) {
   return (
-    <section className="mt-16">
-      <div className="mb-8 max-w-2xl">
-        <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-[#006399]">
-          Galeri Kegiatan
-        </p>
+    <section className="mt-12">
+      <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div>
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#006399]">
+            Galeri
+          </p>
 
-        <h2 className="text-3xl font-bold leading-tight text-[#000767] md:text-4xl">
-          Dokumentasi kegiatan.
-        </h2>
+          <h2 className="text-3xl font-bold leading-tight text-[#000767] md:text-4xl">
+            Dokumentasi kegiatan.
+          </h2>
+        </div>
 
-        <p className="mt-4 leading-8 text-[#3f4851]">
-          Maksimal 6 gambar dari galeri Notion akan ditampilkan di bagian ini.
+        <p className="text-sm font-semibold text-[#3f4851]">
+          Maksimal 6 gambar ditampilkan.
         </p>
       </div>
 
@@ -200,17 +250,21 @@ function GallerySection({
               key={`${image}-${index}`}
               className="overflow-hidden rounded-[2rem] bg-white p-3 shadow-sm ring-1 ring-[#e0e0ff]"
             >
-              <img
+              <SafeImage
                 src={image}
                 alt={`${title} ${index + 1}`}
                 className="h-64 w-full rounded-[1.5rem] object-cover"
+                fallbackClassName="h-64 w-full rounded-[1.5rem]"
+                fallbackLabel="Gambar tidak tersedia"
               />
             </article>
           ))}
         </div>
       ) : (
         <div className="rounded-[2.5rem] bg-white p-8 text-center shadow-sm ring-1 ring-[#e0e0ff]">
-          <IconImage className="mx-auto h-14 w-14 text-[#006399]" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#cde5ff] text-[#006399]">
+            <IconImage className="h-8 w-8" />
+          </div>
 
           <h3 className="mt-5 text-2xl font-bold text-[#000767]">
             Galeri belum tersedia.

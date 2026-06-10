@@ -3,6 +3,13 @@ import type { SVGProps } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { yoloPrograms, yoloProfile, yoloLinks } from "@/data/yolo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Program",
+  description:
+    "Lihat program YOLO dalam bidang pendidikan, sosial, pembinaan, komunitas, dan pengembangan pemuda.",
+};
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -51,7 +58,6 @@ export default function ProgramPage() {
 
       <ProgramFlow />
 
-      <ProgramCTA />
 
       <Footer />
     </main>
@@ -87,15 +93,6 @@ function ProgramHero() {
             >
               Lihat Kegiatan
               <IconArrowRight className="h-5 w-5" />
-            </Link>
-
-            <Link
-              href={yoloLinks.join}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full border-2 border-[#006399] bg-white px-7 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#e0e0ff]"
-            >
-              Gabung YOLO
             </Link>
           </div>
         </div>
@@ -296,38 +293,6 @@ function ProgramFlow() {
             </article>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-function ProgramCTA() {
-  return (
-    <section className="bg-[#006399]">
-      <div className="mx-auto flex max-w-[1280px] flex-col items-start justify-between gap-6 px-4 py-16 text-white md:flex-row md:items-center md:px-16">
-        <div>
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#95ccff]">
-            Ikut Program
-          </p>
-
-          <h2 className="max-w-2xl text-3xl font-bold leading-tight md:text-4xl">
-            Mau ikut tumbuh dan bergerak bersama YOLO?
-          </h2>
-
-          <p className="mt-4 max-w-2xl leading-8 text-white/80">
-            Bergabung sebagai anggota atau relawan untuk ikut dalam program
-            pendidikan, sosial, pembinaan, dan komunitas YOLO.
-          </p>
-        </div>
-
-        <Link
-          href={yoloLinks.join}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 rounded-full bg-white px-8 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
-        >
-          Gabung Sekarang
-        </Link>
       </div>
     </section>
   );

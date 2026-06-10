@@ -9,6 +9,13 @@ import {
   yoloTeam,
   yoloVision,
 } from "@/data/yolo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "Kenali YOLO, Young Muslim's Life Community, komunitas kepemudaan yang bergerak di bidang pendidikan dan sosial.",
+};
 
 function getInitials(name: string) {
   return name
@@ -30,7 +37,6 @@ export default function AboutPage() {
       <VisionMissionSection />
       <TeamSection />
       <MembersSection />
-      <AboutCTA />
 
       <Footer />
     </main>
@@ -228,38 +234,6 @@ function MembersSection() {
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-function AboutCTA() {
-  return (
-    <section className="bg-[#006399]">
-      <div className="mx-auto flex max-w-[1280px] flex-col items-start justify-between gap-6 px-4 py-16 text-white md:flex-row md:items-center md:px-16">
-        <div>
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#95ccff]">
-            Ikut Bergerak
-          </p>
-
-          <h2 className="max-w-2xl text-3xl font-bold leading-tight md:text-4xl">
-            Mau menjadi bagian dari komunitas YOLO?
-          </h2>
-
-          <p className="mt-4 max-w-2xl leading-8 text-white/80">
-            Gabung bersama YOLO dan ikut dalam kegiatan pendidikan, sosial, dan
-            pembinaan yang bermanfaat untuk masyarakat.
-          </p>
-        </div>
-
-        <Link
-          href={yoloLinks.join}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 rounded-full bg-white px-8 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
-        >
-          Gabung YOLO
-        </Link>
       </div>
     </section>
   );
