@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import type { SVGProps } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { yoloLinks } from "@/data/yolo";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
@@ -39,7 +40,7 @@ const activities: Activity[] = [
     location: "Area sekitar kota",
     description:
       "Kegiatan berbagi takjil dan makanan ringan untuk warga sekitar serta pengguna jalan menjelang waktu berbuka.",
-    registrationLink: "/gabung",
+    registrationLink: yoloLinks.volunteer,
   },
   {
     id: 2,
@@ -50,7 +51,7 @@ const activities: Activity[] = [
     location: "Rumah belajar warga",
     description:
       "Kegiatan belajar santai bersama anak-anak melalui cerita, permainan edukatif, dan aktivitas kreatif.",
-    registrationLink: "/gabung",
+    registrationLink: yoloLinks.volunteer,
   },
   {
     id: 3,
@@ -61,7 +62,7 @@ const activities: Activity[] = [
     location: "Lingkungan sekitar",
     description:
       "Penyaluran paket bantuan sederhana untuk warga sekitar yang membutuhkan bersama relawan YOLO.",
-    registrationLink: "/gabung",
+    registrationLink: yoloLinks.volunteer,
   },
   {
     id: 4,
@@ -72,7 +73,7 @@ const activities: Activity[] = [
     location: "Masjid dan area warga",
     description:
       "Aksi berbagi makanan sederhana untuk warga sekitar sebagai bentuk kepedulian rutin komunitas.",
-    registrationLink: "/gabung",
+    registrationLink: yoloLinks.volunteer,
   },
   {
     id: 5,
@@ -83,7 +84,7 @@ const activities: Activity[] = [
     location: "Area pemukiman warga",
     description:
       "Kegiatan gotong royong membersihkan lingkungan sekitar bersama warga dan relawan YOLO.",
-    registrationLink: "/gabung",
+    registrationLink: yoloLinks.volunteer,
   },
   {
     id: 6,
@@ -94,7 +95,7 @@ const activities: Activity[] = [
     location: "Ruang belajar komunitas",
     description:
       "Dokumentasi kegiatan edukasi ringan bersama anak-anak melalui membaca, menulis, dan permainan.",
-    registrationLink: "/gabung",
+    registrationLink: yoloLinks.volunteer,
   },
 ];
 
@@ -262,9 +263,7 @@ function ActivityCard({ activity }: { activity: Activity }) {
           {activity.title}
         </h3>
 
-        <p className="mt-3 leading-7 text-[#3f4851]">
-          {activity.description}
-        </p>
+        <p className="mt-3 leading-7 text-[#3f4851]">{activity.description}</p>
 
         <div className="mt-6 grid gap-3 text-sm font-semibold text-[#3f4851]">
           <div className="flex items-center gap-2">
@@ -281,14 +280,18 @@ function ActivityCard({ activity }: { activity: Activity }) {
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Link
             href={activity.registrationLink}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
           >
-            {activity.status === "Selesai" ? "Lihat Detail" : "Daftar Ikut"}
+            {activity.status === "Selesai" ? "Tanya Detail" : "Daftar Ikut"}
             <IconArrowRight className="h-4 w-4" />
           </Link>
 
           <Link
-            href="/kontak"
+            href={yoloLinks.askAdmin}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full bg-[#f4f2ff] px-5 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#e0e0ff]"
           >
             Tanya Admin
@@ -343,7 +346,9 @@ function KegiatanCTA() {
         </div>
 
         <Link
-          href="/gabung"
+          href={yoloLinks.volunteer}
+          target="_blank"
+          rel="noopener noreferrer"
           className="shrink-0 rounded-full bg-white px-8 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
         >
           Gabung Relawan

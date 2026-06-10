@@ -2,13 +2,15 @@ import Link from "next/link";
 import type { ReactNode, SVGProps } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { yoloLinks } from "@/data/yolo";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
 const donationMethods = [
   {
     title: "QRIS",
-    description: "Scan QRIS untuk donasi cepat. Gambar QRIS bisa kamu pasang nanti.",
+    description:
+      "Scan QRIS untuk donasi cepat. Gambar QRIS bisa kamu pasang nanti.",
     value: "Coming Soon",
     icon: <IconQr className="h-8 w-8" />,
   },
@@ -20,7 +22,8 @@ const donationMethods = [
   },
   {
     title: "E-Wallet",
-    description: "Bisa juga lewat e-wallet jika nanti komunitas sudah menyiapkannya.",
+    description:
+      "Bisa juga lewat e-wallet jika nanti komunitas sudah menyiapkannya.",
     value: "DANA / GoPay / OVO",
     icon: <IconWallet className="h-8 w-8" />,
   },
@@ -103,8 +106,9 @@ function DonasiHero() {
             </Link>
 
             <Link
-              href="https://wa.me/6281234567890"
+              href={yoloLinks.donationConfirmation}
               target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-full border-2 border-[#006399] bg-white px-7 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#e0e0ff]"
             >
               Konfirmasi WhatsApp
@@ -173,9 +177,7 @@ function DonationMethods() {
                   Informasi
                 </p>
 
-                <p className="mt-2 font-bold text-[#000767]">
-                  {method.value}
-                </p>
+                <p className="mt-2 font-bold text-[#000767]">{method.value}</p>
               </div>
             </article>
           ))}
@@ -336,7 +338,9 @@ function DonasiCTA() {
             </div>
 
             <Link
-              href="/gabung"
+              href={yoloLinks.volunteer}
+              target="_blank"
+              rel="noopener noreferrer"
               className="shrink-0 rounded-full bg-white px-8 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
             >
               Gabung Relawan
@@ -480,11 +484,7 @@ function IconBox(props: IconProps) {
         opacity="0.75"
       />
       <path d="M12 22v22l20 10V32L12 22z" fill="currentColor" />
-      <path
-        d="M52 22v22L32 54V32l20-10z"
-        fill="currentColor"
-        opacity="0.55"
-      />
+      <path d="M52 22v22L32 54V32l20-10z" fill="currentColor" opacity="0.55" />
     </svg>
   );
 }

@@ -5,7 +5,7 @@ export const navItems = [
   },
   {
     label: "Programs",
-    href: "/programs",
+    href: "/program",
   },
   {
     label: "Kegiatan",
