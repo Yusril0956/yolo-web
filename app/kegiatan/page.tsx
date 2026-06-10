@@ -1,269 +1,111 @@
-"use client";
-
 import Link from "next/link";
-import { useMemo, useState } from "react";
 import type { SVGProps } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getYoloActivities } from "@/lib/notion";
 import { yoloLinks } from "@/data/yolo";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
-type ActivityStatus = "Open Volunteer" | "Upcoming" | "Selesai";
-type ActivityFilter = "Semua" | ActivityStatus;
+export const revalidate = 300;
 
-type Activity = {
-  id: number;
-  title: string;
-  category: string;
-  status: ActivityStatus;
-  date: string;
-  location: string;
-  description: string;
-  registrationLink: string;
-};
-
-const filters: ActivityFilter[] = [
-  "Semua",
-  "Open Volunteer",
-  "Upcoming",
-  "Selesai",
-];
-
-const activities: Activity[] = [
-  {
-    id: 1,
-    title: "Berbagi Takjil Ramadhan",
-    category: "Charity",
-    status: "Open Volunteer",
-    date: "24 Maret 2026",
-    location: "Area sekitar kota",
-    description:
-      "Kegiatan berbagi takjil dan makanan ringan untuk warga sekitar serta pengguna jalan menjelang waktu berbuka.",
-    registrationLink: yoloLinks.volunteer,
-  },
-  {
-    id: 2,
-    title: "Kelas Ceria Anak",
-    category: "Edukasi",
-    status: "Upcoming",
-    date: "12 April 2026",
-    location: "Rumah belajar warga",
-    description:
-      "Kegiatan belajar santai bersama anak-anak melalui cerita, permainan edukatif, dan aktivitas kreatif.",
-    registrationLink: yoloLinks.volunteer,
-  },
-  {
-    id: 3,
-    title: "Paket Kebaikan",
-    category: "Sosial",
-    status: "Selesai",
-    date: "8 Mei 2026",
-    location: "Lingkungan sekitar",
-    description:
-      "Penyaluran paket bantuan sederhana untuk warga sekitar yang membutuhkan bersama relawan YOLO.",
-    registrationLink: yoloLinks.volunteer,
-  },
-  {
-    id: 4,
-    title: "Jumat Berbagi Makanan",
-    category: "Berbagi Makanan",
-    status: "Upcoming",
-    date: "17 Mei 2026",
-    location: "Masjid dan area warga",
-    description:
-      "Aksi berbagi makanan sederhana untuk warga sekitar sebagai bentuk kepedulian rutin komunitas.",
-    registrationLink: yoloLinks.volunteer,
-  },
-  {
-    id: 5,
-    title: "Aksi Bersih Lingkungan",
-    category: "Community",
-    status: "Open Volunteer",
-    date: "26 Mei 2026",
-    location: "Area pemukiman warga",
-    description:
-      "Kegiatan gotong royong membersihkan lingkungan sekitar bersama warga dan relawan YOLO.",
-    registrationLink: yoloLinks.volunteer,
-  },
-  {
-    id: 6,
-    title: "Belajar Bareng Anak-anak",
-    category: "Edukasi",
-    status: "Selesai",
-    date: "2 Juni 2026",
-    location: "Ruang belajar komunitas",
-    description:
-      "Dokumentasi kegiatan edukasi ringan bersama anak-anak melalui membaca, menulis, dan permainan.",
-    registrationLink: yoloLinks.volunteer,
-  },
-];
-
-export default function KegiatanPage() {
-  const [activeFilter, setActiveFilter] = useState<ActivityFilter>("Semua");
-
-  const filteredActivities = useMemo(() => {
-    if (activeFilter === "Semua") {
-      return activities;
-    }
-
-    return activities.filter((activity) => activity.status === activeFilter);
-  }, [activeFilter]);
+export default async function KegiatanPage() {
+  const activities = await getYoloActivities();
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#fbf8ff] text-[#000767]">
       <Navbar />
 
-      <KegiatanHero />
-
       <section className="bg-[#fbf8ff]">
-        <div className="mx-auto max-w-[1280px] px-4 py-20 md:px-16">
-          <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-[#006399]">
-                Daftar Kegiatan
-              </p>
+        <div className="mx-auto max-w-[1280px] px-4 py-16 md:px-16 md:py-20">
+          <PageHeader />
 
-              <h2 className="text-3xl font-bold leading-tight text-[#000767] md:text-4xl">
-                Jadwal, poster, dan dokumentasi aksi YOLO.
-              </h2>
-
-              <p className="mt-4 leading-8 text-[#3f4851]">
-                Semua kegiatan YOLO akan ditampilkan di sini, mulai dari yang
-                sedang membuka relawan, kegiatan mendatang, sampai dokumentasi
-                kegiatan yang sudah selesai.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              {filters.map((filter) => (
-                <button
-                  key={filter}
-                  type="button"
-                  onClick={() => setActiveFilter(filter)}
-                  className={`rounded-full px-5 py-3 text-sm font-bold transition active:scale-95 ${
-                    activeFilter === filter
-                      ? "bg-[#006399] text-white"
-                      : "bg-white text-[#006399] ring-1 ring-[#e0e0ff] hover:bg-[#f4f2ff]"
-                  }`}
-                >
-                  {filter}
-                </button>
+          {activities.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {activities.map((activity) => (
+                <ActivityCard key={activity.id} activity={activity} />
               ))}
             </div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredActivities.map((activity) => (
-              <ActivityCard key={activity.id} activity={activity} />
-            ))}
-          </div>
-
-          {filteredActivities.length === 0 && (
-            <div className="rounded-[2rem] bg-white p-8 text-center ring-1 ring-[#e0e0ff]">
-              <p className="font-semibold text-[#3f4851]">
-                Belum ada kegiatan untuk kategori ini.
-              </p>
-            </div>
+          ) : (
+            <EmptyState />
           )}
+
+          <BottomCTA />
         </div>
       </section>
-
-      <KegiatanCTA />
 
       <Footer />
     </main>
   );
 }
 
-function KegiatanHero() {
+function PageHeader() {
   return (
-    <section className="relative overflow-hidden bg-[#f4f2ff]">
-      <div className="absolute left-[-120px] top-20 h-80 w-80 rounded-full bg-[#1da1f2]/15 blur-3xl" />
-      <div className="absolute right-[-120px] bottom-10 h-80 w-80 rounded-full bg-[#df8400]/15 blur-3xl" />
+    <div className="mb-10 max-w-3xl">
+      <span className="mb-5 inline-block rounded-full bg-[#91f78e] px-4 py-1.5 text-xs font-semibold text-[#00731e]">
+        Kegiatan YOLO
+      </span>
 
-      <div className="relative mx-auto grid max-w-[1280px] items-center gap-12 px-4 py-20 md:px-16 md:py-28 lg:grid-cols-[1fr_0.85fr]">
-        <div>
-          <span className="mb-6 inline-block rounded-full bg-[#91f78e] px-4 py-1.5 text-xs font-semibold text-[#00731e]">
-            Kegiatan YOLO
-          </span>
+      <h1 className="text-4xl font-bold leading-tight tracking-[-0.02em] text-[#000767] md:text-5xl">
+        Kegiatan dan dokumentasi YOLO.
+      </h1>
 
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-[-0.02em] text-[#000767] md:text-6xl md:leading-[1.1]">
-            Ikuti aksi sosial yang sedang berjalan.
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#3f4851]">
-            Lihat jadwal kegiatan YOLO, daftar sebagai relawan, atau cek
-            dokumentasi kegiatan yang sudah dilakukan bersama warga sekitar.
-          </p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/gabung"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-7 py-4 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
-            >
-              Gabung Relawan
-              <IconArrowRight className="h-5 w-5" />
-            </Link>
-
-            <Link
-              href="/donasi"
-              className="inline-flex items-center justify-center rounded-full border-2 border-[#006399] bg-white px-7 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#e0e0ff]"
-            >
-              Dukung Donasi
-            </Link>
-          </div>
-        </div>
-
-        <div className="rounded-[2.5rem] bg-white p-6 shadow-xl shadow-slate-200/70 ring-1 ring-[#e0e0ff]">
-          <div className="rounded-[2rem] bg-[#006399] p-8 text-white">
-            <IconCalendar className="h-20 w-20 text-[#95ccff]" />
-
-            <h2 className="mt-8 text-3xl font-bold leading-tight">
-              Setiap kegiatan adalah ruang untuk hadir dan membantu.
-            </h2>
-
-            <p className="mt-4 leading-8 text-white/85">
-              Kamu bisa ikut sebagai relawan, membantu dokumentasi, mendukung
-              donasi, atau membagikan informasi kegiatan kepada orang lain.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+      <p className="mt-5 max-w-2xl text-lg leading-8 text-[#3f4851]">
+        Lihat kegiatan terbaru YOLO, mulai dari program pendidikan, sosial,
+        pembinaan, sampai dokumentasi kegiatan yang sudah terlaksana.
+      </p>
+    </div>
   );
 }
 
-function ActivityCard({ activity }: { activity: Activity }) {
-  const statusClass =
-    activity.status === "Open Volunteer"
-      ? "bg-[#91f78e] text-[#00731e]"
-      : activity.status === "Upcoming"
-        ? "bg-[#ffdcbe] text-[#693c00]"
-        : "bg-[#cde5ff] text-[#004a75]";
+function ActivityCard({
+  activity,
+}: {
+  activity: Awaited<ReturnType<typeof getYoloActivities>>[number];
+}) {
+  const detailUrl = `/kegiatan/${activity.slug}`;
 
   return (
     <article className="overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-[#e0e0ff] transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70">
-      <div className="relative flex min-h-56 items-center justify-center bg-[#e0e0ff] p-8">
-        <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-xs font-bold text-[#006399]">
-          {activity.category}
-        </div>
+      <Link href={detailUrl} className="block">
+        <div className="relative h-56 bg-[#e0e0ff]">
+          {activity.poster ? (
+            <img
+              src={activity.poster}
+              alt={activity.title}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-[#f4f2ff] p-6 text-center">
+              <div>
+                <IconImage className="mx-auto h-12 w-12 text-[#006399]" />
+                <p className="mt-3 text-sm font-bold text-[#006399]">
+                  Poster belum tersedia
+                </p>
+              </div>
+            </div>
+          )}
 
-        <PosterMockup title={activity.title} status={activity.status} />
-      </div>
+          <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-xs font-bold text-[#006399] shadow-sm">
+            {activity.category || "Kegiatan"}
+          </div>
+
+          <div className="absolute right-5 top-5 rounded-full bg-[#91f78e] px-4 py-2 text-xs font-bold text-[#00731e] shadow-sm">
+            {activity.status || "Published"}
+          </div>
+        </div>
+      </Link>
 
       <div className="p-6">
-        <span
-          className={`mb-4 inline-flex rounded-full px-4 py-2 text-xs font-bold ${statusClass}`}
-        >
-          {activity.status}
-        </span>
+        <Link href={detailUrl}>
+          <h2 className="text-2xl font-bold leading-tight text-[#000767] transition hover:text-[#006399]">
+            {activity.title}
+          </h2>
+        </Link>
 
-        <h3 className="text-2xl font-bold leading-tight text-[#000767]">
-          {activity.title}
-        </h3>
-
-        <p className="mt-3 leading-7 text-[#3f4851]">{activity.description}</p>
+        <p className="mt-3 line-clamp-3 leading-7 text-[#3f4851]">
+          {activity.description || "Deskripsi kegiatan belum tersedia."}
+        </p>
 
         <div className="mt-6 grid gap-3 text-sm font-semibold text-[#3f4851]">
           <div className="flex items-center gap-2">
@@ -273,75 +115,86 @@ function ActivityCard({ activity }: { activity: Activity }) {
 
           <div className="flex items-center gap-2">
             <IconPin className="h-5 w-5 text-[#006e1c]" />
-            {activity.location}
+            {activity.location || "Lokasi menyusul"}
           </div>
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Link
-            href={activity.registrationLink}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={detailUrl}
             className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
           >
-            {activity.status === "Selesai" ? "Tanya Detail" : "Daftar Ikut"}
+            Lihat Detail
             <IconArrowRight className="h-4 w-4" />
           </Link>
 
-          <Link
-            href={yoloLinks.askAdmin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-full bg-[#f4f2ff] px-5 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#e0e0ff]"
-          >
-            Tanya Admin
-          </Link>
+          {activity.registrationLink ? (
+            <Link
+              href={activity.registrationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-[#f4f2ff] px-5 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#e0e0ff]"
+            >
+              Daftar
+            </Link>
+          ) : (
+            <Link
+              href={yoloLinks.askAdmin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-[#f4f2ff] px-5 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#e0e0ff]"
+            >
+              Tanya Admin
+            </Link>
+          )}
         </div>
       </div>
     </article>
   );
 }
 
-function PosterMockup({
-  title,
-  status,
-}: {
-  title: string;
-  status: ActivityStatus;
-}) {
+function EmptyState() {
   return (
-    <div className="w-full max-w-[240px] rotate-[-2deg] rounded-[1.5rem] bg-white p-4 shadow-lg">
-      <div className="rounded-[1.2rem] bg-[#006399] p-5 text-white">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#95ccff]">
-          YOLO Event
-        </p>
+    <div className="rounded-[2.5rem] bg-white p-8 text-center shadow-sm ring-1 ring-[#e0e0ff] md:p-12">
+      <IconImage className="mx-auto h-14 w-14 text-[#006399]" />
 
-        <h4 className="mt-8 text-2xl font-bold leading-tight">{title}</h4>
+      <h2 className="mt-5 text-2xl font-bold text-[#000767]">
+        Belum ada kegiatan yang dipublikasikan.
+      </h2>
 
-        <div className="mt-8 rounded-full bg-white px-4 py-2 text-center text-xs font-bold text-[#006399]">
-          {status}
-        </div>
-      </div>
+      <p className="mx-auto mt-3 max-w-xl leading-8 text-[#3f4851]">
+        Tambahkan kegiatan di Notion, centang Published, lalu halaman ini akan
+        otomatis menampilkan datanya.
+      </p>
+
+      <Link
+        href={yoloLinks.askAdmin}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-6 inline-flex items-center justify-center rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
+      >
+        Tanya Admin YOLO
+      </Link>
     </div>
   );
 }
 
-function KegiatanCTA() {
+function BottomCTA() {
   return (
-    <section className="bg-[#006399]">
-      <div className="mx-auto flex max-w-[1280px] flex-col items-start justify-between gap-6 px-4 py-16 text-white md:flex-row md:items-center md:px-16">
+    <div className="mt-10 rounded-[2.5rem] bg-[#006399] p-8 text-white md:p-10">
+      <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
         <div>
           <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#95ccff]">
             Ikut Bergerak
           </p>
 
-          <h2 className="max-w-2xl text-3xl font-bold leading-tight md:text-4xl">
-            Mau ikut di kegiatan sosial YOLO berikutnya?
+          <h2 className="max-w-2xl text-2xl font-bold leading-tight md:text-3xl">
+            Mau ikut dalam kegiatan YOLO berikutnya?
           </h2>
 
-          <p className="mt-4 max-w-2xl leading-8 text-white/80">
-            Daftar sebagai relawan dan bantu sesuai kemampuanmu. Bisa lewat
-            tenaga, ide, dokumentasi, donasi, atau dukungan sederhana lainnya.
+          <p className="mt-3 max-w-2xl leading-8 text-white/80">
+            Hubungi admin untuk bertanya tentang kegiatan, relawan, atau program
+            yang sedang berjalan.
           </p>
         </div>
 
@@ -349,12 +202,12 @@ function KegiatanCTA() {
           href={yoloLinks.volunteer}
           target="_blank"
           rel="noopener noreferrer"
-          className="shrink-0 rounded-full bg-white px-8 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
+          className="shrink-0 rounded-full bg-white px-7 py-4 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
         >
           Gabung Relawan
         </Link>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -400,6 +253,16 @@ function IconPin(props: IconProps) {
         fill="currentColor"
       />
       <circle cx="12" cy="9" r="2.5" fill="white" />
+    </svg>
+  );
+}
+
+function IconImage(props: IconProps) {
+  return (
+    <svg viewBox="0 0 64 64" fill="none" {...props}>
+      <rect x="8" y="12" width="48" height="40" rx="8" fill="currentColor" />
+      <circle cx="24" cy="26" r="5" fill="white" />
+      <path d="M16 44l12-12 9 9 6-6 7 9H16z" fill="white" opacity="0.9" />
     </svg>
   );
 }
