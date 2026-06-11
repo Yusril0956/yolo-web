@@ -16,7 +16,7 @@ export const navItems = [
     href: "/donasi",
   },
   {
-    label: "About Us",
+    label: "Tentang Kami",
     href: "/about",
   },
 ];

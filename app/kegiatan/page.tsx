@@ -12,7 +12,7 @@ type IconProps = SVGProps<SVGSVGElement>;
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Kegiatan",
+  title: "Kegiatan - YOLO",
   description:
     "Lihat kegiatan terbaru YOLO, dokumentasi kegiatan, program sosial, dan kegiatan pendidikan komunitas.",
 };

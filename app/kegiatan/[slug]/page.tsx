@@ -26,7 +26,7 @@ export async function generateMetadata({
 
   if (!activity) {
     return {
-      title: "Kegiatan Tidak Ditemukan",
+      title: "Kegiatan Tidak Ditemukan - YOLO",
       description: "Kegiatan YOLO yang kamu cari belum tersedia.",
     };
   }
@@ -36,7 +36,7 @@ export async function generateMetadata({
     description:
       activity.description || "Detail kegiatan dan dokumentasi YOLO.",
     openGraph: {
-      title: `${activity.title} | YOLO`,
+      title: `${activity.title} - YOLO`,
       description:
         activity.description || "Detail kegiatan dan dokumentasi YOLO.",
       images: activity.poster

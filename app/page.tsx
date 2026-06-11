@@ -14,7 +14,7 @@ type IconProps = SVGProps<SVGSVGElement>;
 const featuredPrograms = yoloPrograms.slice(0, 4);
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Home - YOLO",
   description:
     "YOLO adalah komunitas kepemudaan yang menjadi ruang tumbuh, bergerak, dan bermanfaat melalui kegiatan pendidikan dan sosial.",
 };

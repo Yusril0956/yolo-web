@@ -12,7 +12,7 @@ import {
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "Tentang Kami - YOLO",
   description:
     "Kenali YOLO, Young Muslim's Life Community, komunitas kepemudaan yang bergerak di bidang pendidikan dan sosial.",
 };

@@ -6,7 +6,7 @@ import { yoloPrograms, yoloProfile, yoloLinks } from "@/data/yolo";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Program",
+  title: "Program - YOLO",
   description:
     "Lihat program YOLO dalam bidang pendidikan, sosial, pembinaan, komunitas, dan pengembangan pemuda.",
 };

@@ -46,7 +46,7 @@ const donationSteps = [
 ];
 
 export const metadata: Metadata = {
-  title: "Donasi",
+  title: "Donasi - YOLO",
   description:
     "Dukung kegiatan pendidikan, sosial, dan pembinaan komunitas YOLO melalui donasi.",
 };
