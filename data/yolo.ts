@@ -109,34 +109,42 @@ export const yoloTeam = [
   {
     name: "Nurhaeti Edi P",
     role: "Co-Founder",
+    photo: "https://i.pinimg.com/736x/14/5b/21/145b2104db8c9f635d5f0262a569fd49.jpg",
   },
   {
     name: "Depi Riyanti",
     role: "Ketua Umum",
+    photo: "https://i.pinimg.com/736x/11/6c/af/116cafe59e51a816fdaa1bca1cc83b4f.jpg",
   },
   {
     name: "Alanisa N",
     role: "Wakil Ketua",
+    photo: "https://i.pinimg.com/control1/1200x/6e/34/23/6e3423bbe339540cb5a25768527237b7.jpg",
   },
   {
     name: "Annisa Pebriani",
     role: "Sekben",
+    photo: "https://i.pinimg.com/1200x/08/f6/33/08f63352f786d93a7c7342650ba5e3ef.jpg",
   },
   {
     name: "Anita Sri P",
     role: "PSDA",
+    photo: "https://i.pinimg.com/736x/d5/49/10/d549103bba0b045b31f7f269d6f5b6e2.jpg",
   },
   {
     name: "Salis",
     role: "Program",
+    photo: "https://i.pinimg.com/736x/54/7c/82/547c8214048b7e8f2bc113f7a0104fea.jpg",
   },
   {
     name: "M. Nizar",
     role: "Public Relation",
+    photo: "https://i.pinimg.com/736x/28/fe/78/28fe78a0562b2e5540776be5b2e3fd6c.jpg",
   },
   {
     name: "Alanisa Nabilah",
     role: "Media",
+    photo: "https://i.pinimg.com/736x/4b/25/44/4b25440372f9a681588661437d6bcbd8.jpg",
   },
 ];
 
@@ -167,8 +175,7 @@ export const yoloContacts = {
 };
 
 export const yoloLinks = {
-  join:
-    "https://wa.me/6285871786258?text=Assalamu%27alaikum%2C%20saya%20ingin%20bergabung%20dengan%20YOLO.",
+  join: "https://wa.me/6285871786258?text=Assalamu%27alaikum%2C%20saya%20ingin%20bergabung%20dengan%20YOLO.",
   volunteer:
     "https://wa.me/6285871786258?text=Assalamu%27alaikum%2C%20saya%20ingin%20ikut%20menjadi%20relawan%20YOLO.",
   donationConfirmation:

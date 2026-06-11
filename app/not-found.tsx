@@ -1,10 +1,8 @@
 import Link from "next/link";
-import type { SVGProps } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { yoloLinks } from "@/data/yolo";
-
-type IconProps = SVGProps<SVGSVGElement>;
+import { Compass, ArrowRight } from "lucide-react";
 
 export default function NotFoundPage() {
   return (
@@ -15,7 +13,7 @@ export default function NotFoundPage() {
         <div className="mx-auto flex min-h-[70vh] max-w-[1280px] items-center px-4 py-16 md:px-16">
           <div className="mx-auto max-w-2xl text-center">
             <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-[#cde5ff] text-[#006399]">
-              <IconCompass className="h-12 w-12" />
+              <Compass size={32} />
             </div>
 
             <span className="mb-5 inline-block rounded-full bg-[#91f78e] px-4 py-1.5 text-xs font-semibold text-[#00731e]">
@@ -37,7 +35,7 @@ export default function NotFoundPage() {
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-7 py-4 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
               >
                 Kembali ke Home
-                <IconArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-5 w-5" />
               </Link>
 
               <Link
@@ -62,42 +60,5 @@ export default function NotFoundPage() {
 
       <Footer />
     </main>
-  );
-}
-
-function IconArrowRight(props: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      {...props}
-    >
-      <path
-        d="M5 12h14M13 6l6 6-6 6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function IconCompass(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <circle
-        cx="32"
-        cy="32"
-        r="24"
-        stroke="currentColor"
-        strokeWidth="7"
-      />
-      <path
-        d="M40 18l-6 17-17 6 6-17 17-6z"
-        fill="currentColor"
-      />
-      <circle cx="32" cy="32" r="4" fill="white" />
-    </svg>
   );
 }

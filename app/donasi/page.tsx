@@ -1,11 +1,10 @@
 import Link from "next/link";
-import type { ReactNode, SVGProps } from "react";
+import type { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { yoloLinks, yoloProfile } from "@/data/yolo";
 import type { Metadata } from "next";
-
-type IconProps = SVGProps<SVGSVGElement>;
+import { ArrowRight, WalletMinimal, Landmark, CircleCheckBig } from "lucide-react";
 
 type PaymentMethod = {
   name: string;
@@ -21,14 +20,14 @@ const paymentMethods: PaymentMethod[] = [
     number: "085797148636",
     accountName: "Annisa Pebriani",
     note: "Gunakan nomor ini untuk donasi melalui DANA.",
-    icon: <IconWallet className="h-8 w-8" />,
+    icon: <WalletMinimal className="h-8 w-8" />,
   },
   {
     name: "BCA",
     number: "6395827557",
     accountName: "Annisa Pebriani",
     note: "Gunakan rekening ini untuk donasi melalui transfer BCA.",
-    icon: <IconBank className="h-8 w-8" />,
+    icon: <Landmark className="h-8 w-8" />,
   },
 ];
 
@@ -196,7 +195,7 @@ function DonationSteps() {
         className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
       >
         Konfirmasi Donasi
-        <IconArrowRight className="h-4 w-4" />
+        <ArrowRight className="h-4 w-4" />
       </Link>
     </div>
   );
@@ -218,7 +217,7 @@ function DonationInfoSection() {
           {donationUses.map((item) => (
             <div key={item} className="flex gap-3">
               <div className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#91f78e] text-[#00731e]">
-                <IconCheck className="h-3.5 w-3.5" />
+                <CircleCheckBig className="h-4 w-4" />
               </div>
 
               <p className="leading-7 text-[#3f4851]">{item}</p>
@@ -261,70 +260,5 @@ function DonationInfoSection() {
         </div>
       </div>
     </div>
-  );
-}
-
-/* SVG Icons */
-
-function IconArrowRight(props: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      {...props}
-    >
-      <path
-        d="M5 12h14M13 6l6 6-6 6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function IconCheck(props: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      {...props}
-    >
-      <path d="M5 12l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function IconWallet(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <path
-        d="M10 18c0-4 3-7 7-7h32c3 0 5 2 5 5v6H17c-4 0-7 3-7 7V18z"
-        fill="currentColor"
-        opacity="0.55"
-      />
-      <path
-        d="M10 26c0-4 3-7 7-7h36c4 0 7 3 7 7v23c0 4-3 7-7 7H17c-4 0-7-3-7-7V26z"
-        fill="currentColor"
-      />
-      <circle cx="48" cy="38" r="4" fill="white" />
-    </svg>
-  );
-}
-
-function IconBank(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <path d="M8 24L32 10l24 14H8z" fill="currentColor" />
-      <path
-        d="M14 28h8v20h-8V28zM28 28h8v20h-8V28zM42 28h8v20h-8V28zM10 52h44"
-        stroke="currentColor"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }

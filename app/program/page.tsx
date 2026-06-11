@@ -1,9 +1,20 @@
 import Link from "next/link";
-import type { SVGProps } from "react";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { yoloPrograms, yoloProfile, yoloLinks } from "@/data/yolo";
-import type { Metadata } from "next";
+import { yoloLinks, yoloPrograms, yoloProfile } from "@/data/yolo";
+import {
+  ArrowRight,
+  BookOpen,
+  ClipboardList,
+  Heart,
+  HeartHandshake,
+  MessageCircle,
+  Sparkles,
+  Sunrise,
+  UsersRound,
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Program - YOLO",
@@ -11,53 +22,59 @@ export const metadata: Metadata = {
     "Lihat program YOLO dalam bidang pendidikan, sosial, pembinaan, komunitas, dan pengembangan pemuda.",
 };
 
-type IconProps = SVGProps<SVGSVGElement>;
+type Program = (typeof yoloPrograms)[number];
 
-const categories = [
-  "Semua",
-  "Edukasi",
-  "Sosial",
-  "Komunitas",
-  "Internal",
-  "Pembinaan",
-  "Sosial & Keagamaan",
-];
+const featuredPrograms = yoloPrograms.slice(0, 4);
+
+const programCategories = Array.from(
+  new Set(yoloPrograms.map((program) => program.category)),
+);
+
+const categoryDescriptions: Record<string, string> = {
+  Edukasi: "Program belajar, mengajar, dan pengembangan diri.",
+  Sosial: "Program berbagi dan aksi kebermanfaatan untuk masyarakat.",
+  Komunitas: "Program kebersamaan, relasi, dan penguatan komunitas.",
+  Internal: "Program penguatan anggota dan pengurus YOLO.",
+  Pembinaan: "Program penguatan nilai, karakter, dan spiritual.",
+  "Sosial & Keagamaan": "Program sosial yang berjalan bersama nilai keagamaan.",
+};
 
 function getProgramsByCategory(category: string) {
-  if (category === "Semua") {
-    return yoloPrograms;
-  }
-
   return yoloPrograms.filter((program) => program.category === category);
 }
 
 function getCategoryIcon(category: string) {
-  if (category === "Edukasi") return <IconBook className="h-8 w-8" />;
-  if (category === "Sosial") return <IconHands className="h-8 w-8" />;
-  if (category === "Komunitas") return <IconPeople className="h-8 w-8" />;
-  if (category === "Internal") return <IconTeam className="h-8 w-8" />;
-  if (category === "Pembinaan") return <IconSunrise className="h-8 w-8" />;
-  if (category === "Sosial & Keagamaan")
-    return <IconHeart className="h-8 w-8" />;
+  if (category === "Edukasi")
+    return <BookOpen className="h-5 w-5" strokeWidth={2.4} />;
 
-  return <IconSpark className="h-8 w-8" />;
+  if (category === "Sosial")
+    return <HeartHandshake className="h-5 w-5" strokeWidth={2.4} />;
+
+  if (category === "Komunitas")
+    return <UsersRound className="h-5 w-5" strokeWidth={2.4} />;
+
+  if (category === "Internal")
+    return <ClipboardList className="h-5 w-5" strokeWidth={2.4} />;
+
+  if (category === "Pembinaan")
+    return <Sunrise className="h-5 w-5" strokeWidth={2.4} />;
+
+  if (category === "Sosial & Keagamaan")
+    return <Heart className="h-5 w-5" strokeWidth={2.4} />;
+
+  return <Sparkles className="h-5 w-5" strokeWidth={2.4} />;
 }
 
 export default function ProgramPage() {
-  const featuredPrograms = yoloPrograms.slice(0, 6);
-
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#fbf8ff] text-[#000767]">
       <Navbar />
 
       <ProgramHero />
-
-      <FeaturedPrograms programs={featuredPrograms} />
-
+      <FeaturedPrograms />
       <ProgramCategories />
-
       <ProgramFlow />
-
+      <ProgramCta />
 
       <Footer />
     </main>
@@ -66,50 +83,66 @@ export default function ProgramPage() {
 
 function ProgramHero() {
   return (
-    <section className="relative overflow-hidden bg-[#f4f2ff]">
-      <div className="absolute left-[-120px] top-20 h-80 w-80 rounded-full bg-[#1da1f2]/15 blur-3xl" />
-      <div className="absolute right-[-120px] bottom-10 h-80 w-80 rounded-full bg-[#df8400]/15 blur-3xl" />
-
-      <div className="relative mx-auto grid max-w-[1280px] items-center gap-12 px-4 py-20 md:px-16 md:py-28 lg:grid-cols-[1fr_0.85fr]">
+    <section className="bg-[#fbf8ff]">
+      <div className="mx-auto grid max-w-[1280px] gap-10 px-4 py-14 md:px-16 md:py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
         <div>
-          <span className="mb-6 inline-block rounded-full bg-[#91f78e] px-4 py-1.5 text-xs font-semibold text-[#00731e]">
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
             Program YOLO
-          </span>
-
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-[-0.02em] text-[#000767] md:text-6xl md:leading-[1.1]">
-            Program pendidikan dan sosial untuk tumbuh bersama.
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#3f4851]">
-            YOLO bergerak melalui program-program positif di bidang pendidikan,
-            sosial, pembinaan, dan komunitas. Seluruh program diarahkan untuk
-            menjadi ruang tumbuh, bergerak, dan bermanfaat.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <h1 className="max-w-3xl text-3xl font-bold leading-tight tracking-[-0.02em] text-[#000767] md:text-5xl md:leading-[1.08]">
+            Ruang gerak untuk belajar, berbagi, dan bertumbuh.
+          </h1>
+
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#3f4851] md:text-lg md:leading-8">
+            Program YOLO bergerak di bidang pendidikan, sosial, pembinaan,
+            komunitas, dan pengembangan pemuda muslim.
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/kegiatan"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-7 py-4 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
             >
               Lihat Kegiatan
-              <IconArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+            </Link>
+
+            <Link
+              href={yoloLinks.askAdmin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-[#006399] bg-white px-6 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#f4f2ff]"
+            >
+              Tanya Program
             </Link>
           </div>
         </div>
 
-        <div className="rounded-[2.5rem] bg-white p-6 shadow-xl shadow-slate-200/70 ring-1 ring-[#e0e0ff]">
-          <div className="rounded-[2rem] bg-[#006399] p-8 text-white">
-            <IconSpark className="h-20 w-20 text-[#95ccff]" />
+        <div className="rounded-[2rem] border border-[#e0e0ff] bg-white p-5 shadow-sm">
+          <div className="rounded-[1.5rem] bg-[#006399] p-7 text-white">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-[#95ccff]">
+              <Sparkles className="h-6 w-6" strokeWidth={2.4} />
+            </div>
 
-            <h2 className="mt-8 text-3xl font-bold leading-tight">
+            <p className="mt-6 text-sm font-bold uppercase tracking-[0.2em] text-[#95ccff]">
+              {yoloProfile.name}
+            </p>
+
+            <h2 className="mt-3 text-2xl font-bold leading-tight md:text-3xl">
               {yoloProfile.tagline}
             </h2>
 
-            <p className="mt-4 leading-8 text-white/85">
-              Setiap program menjadi ruang bagi pemuda muslim untuk
-              mengembangkan potensi, memperkuat kepedulian, dan memberi manfaat
-              untuk masyarakat.
+            <p className="mt-4 leading-7 text-white/80">
+              Setiap program menjadi jalan kecil untuk membangun kepedulian,
+              mengembangkan potensi, dan memberi manfaat untuk sekitar.
             </p>
+          </div>
+
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            <HeroStat value="14+" label="Program" />
+            <HeroStat value="6" label="Kategori" />
+            <HeroStat value="2022" label="Sejak" />
           </div>
         </div>
       </div>
@@ -117,27 +150,37 @@ function ProgramHero() {
   );
 }
 
-function FeaturedPrograms({ programs }: { programs: typeof yoloPrograms }) {
+function HeroStat({ value, label }: { value: string; label: string }) {
   return (
-    <section className="bg-[#fbf8ff]">
-      <div className="mx-auto max-w-[1280px] px-4 py-20 md:px-16">
-        <div className="mb-10 max-w-2xl">
-          <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-[#006399]">
-            Program Unggulan
-          </p>
+    <div className="rounded-2xl bg-[#f4f2ff] px-4 py-3">
+      <p className="text-lg font-bold text-[#006399]">{value}</p>
+      <p className="mt-0.5 text-xs font-semibold text-[#3f4851]">{label}</p>
+    </div>
+  );
+}
 
-          <h2 className="text-3xl font-bold leading-tight text-[#000767] md:text-4xl">
-            Beberapa program utama YOLO.
-          </h2>
+function FeaturedPrograms() {
+  return (
+    <section className="bg-white">
+      <div className="mx-auto max-w-[1280px] px-4 py-12 md:px-16 md:py-14">
+        <div className="mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <SectionHeading
+            eyebrow="Program Unggulan"
+            title="Beberapa program utama YOLO."
+            description="Program yang menjadi wajah gerakan YOLO dalam pendidikan, sosial, dan komunitas."
+          />
 
-          <p className="mt-4 leading-8 text-[#3f4851]">
-            Program-program ini menjadi wajah gerakan YOLO dalam pendidikan,
-            sosial, dan pengembangan komunitas.
-          </p>
+          <Link
+            href="#semua-program"
+            className="inline-flex w-fit items-center gap-2 text-sm font-bold text-[#006399] transition hover:text-[#1da1f2]"
+          >
+            Lihat semua
+            <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+          </Link>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {programs.map((program) => (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {featuredPrograms.map((program) => (
             <ProgramCard key={program.title} program={program} />
           ))}
         </div>
@@ -146,70 +189,50 @@ function FeaturedPrograms({ programs }: { programs: typeof yoloPrograms }) {
   );
 }
 
+function ProgramCard({ program }: { program: Program }) {
+  return (
+    <article className="rounded-[1.5rem] border border-[#e0e0ff] bg-[#fbf8ff] p-5 transition hover:-translate-y-1 hover:bg-[#f4f2ff] hover:shadow-lg hover:shadow-slate-200/70">
+      <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#cde5ff] text-[#006399]">
+        {getCategoryIcon(program.category)}
+      </div>
+
+      <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#006399]">
+        {program.category}
+      </p>
+
+      <h3 className="text-lg font-bold leading-tight text-[#000767]">
+        {program.title}
+      </h3>
+
+      <p className="mt-3 text-sm leading-6 text-[#3f4851]">
+        {program.description}
+      </p>
+    </article>
+  );
+}
+
 function ProgramCategories() {
   return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-[1280px] px-4 py-20 md:px-16">
-        <div className="mb-10 max-w-2xl">
-          <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-[#006399]">
-            Semua Program
-          </p>
-
-          <h2 className="text-3xl font-bold leading-tight text-[#000767] md:text-4xl">
-            Program YOLO berdasarkan kategori.
-          </h2>
-
-          <p className="mt-4 leading-8 text-[#3f4851]">
-            Daftar program ini bisa kamu tampilkan dulu secara statis. Nanti
-            kalau sudah pakai Notion, bagian ini bisa dibuat lebih dinamis.
-          </p>
+    <section id="semua-program" className="bg-[#fbf8ff]">
+      <div className="mx-auto max-w-[1280px] px-4 py-12 md:px-16 md:py-14">
+        <div className="mb-8">
+          <SectionHeading
+            eyebrow="Semua Program"
+            title="Program berdasarkan kategori."
+            description="Daftar program YOLO dikelompokkan agar lebih mudah dibaca dan dipahami."
+          />
         </div>
 
-        <div className="grid gap-10">
-          {categories.map((category) => {
+        <div className="grid gap-5">
+          {programCategories.map((category) => {
             const programs = getProgramsByCategory(category);
 
-            if (programs.length === 0) return null;
-
             return (
-              <div key={category}>
-                <div className="mb-5 flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#cde5ff] text-[#006399]">
-                    {getCategoryIcon(category)}
-                  </div>
-
-                  <div>
-                    <h3 className="text-2xl font-bold text-[#000767]">
-                      {category}
-                    </h3>
-
-                    <p className="text-sm font-semibold text-[#3f4851]">
-                      {programs.length} program
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {programs.map((program) => (
-                    <article
-                      key={`${category}-${program.title}`}
-                      className="rounded-[1.5rem] bg-[#fbf8ff] p-5 ring-1 ring-[#e0e0ff]"
-                    >
-                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#006399]">
-                        {program.category}
-                      </p>
-
-                      <h4 className="text-xl font-bold text-[#000767]">
-                        {program.title}
-                      </h4>
-
-                      <p className="mt-3 leading-7 text-[#3f4851]">
-                        {program.description}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </div>
+              <CategoryGroup
+                key={category}
+                category={category}
+                programs={programs}
+              />
             );
           })}
         </div>
@@ -218,23 +241,51 @@ function ProgramCategories() {
   );
 }
 
-function ProgramCard({ program }: { program: (typeof yoloPrograms)[number] }) {
+function CategoryGroup({
+  category,
+  programs,
+}: {
+  category: string;
+  programs: Program[];
+}) {
   return (
-    <article className="rounded-[2rem] bg-white p-7 shadow-sm ring-1 ring-[#e0e0ff] transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70">
-      <div className="mb-6 flex items-start justify-between gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#cde5ff] text-[#006399]">
-          {getCategoryIcon(program.category)}
+    <section className="rounded-[1.75rem] border border-[#e0e0ff] bg-white p-5 shadow-sm md:p-6">
+      <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#cde5ff] text-[#006399]">
+            {getCategoryIcon(category)}
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-[#000767]">{category}</h3>
+            <p className="mt-1 text-sm leading-6 text-[#3f4851]">
+              {categoryDescriptions[category] || "Program YOLO."}
+            </p>
+          </div>
         </div>
 
-        <span className="rounded-full bg-[#f4f2ff] px-4 py-2 text-xs font-bold text-[#006399]">
-          {program.category}
+        <span className="w-fit rounded-full bg-[#f4f2ff] px-4 py-2 text-xs font-bold text-[#006399]">
+          {programs.length} program
         </span>
       </div>
 
-      <h3 className="text-2xl font-bold text-[#000767]">{program.title}</h3>
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        {programs.map((program) => (
+          <article
+            key={`${category}-${program.title}`}
+            className="rounded-[1.25rem] bg-[#fbf8ff] p-4 ring-1 ring-[#e0e0ff]"
+          >
+            <h4 className="text-base font-bold leading-tight text-[#000767]">
+              {program.title}
+            </h4>
 
-      <p className="mt-4 leading-8 text-[#3f4851]">{program.description}</p>
-    </article>
+            <p className="mt-2 text-sm leading-6 text-[#3f4851]">
+              {program.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -263,31 +314,29 @@ function ProgramFlow() {
   ];
 
   return (
-    <section className="bg-[#fbf8ff]">
-      <div className="mx-auto max-w-[1280px] px-4 py-20 md:px-16">
-        <div className="mb-10 max-w-2xl">
-          <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-[#006399]">
-            Cara Program Berjalan
-          </p>
-
-          <h2 className="text-3xl font-bold leading-tight text-[#000767] md:text-4xl">
-            Dari ide sampai menjadi aksi nyata.
-          </h2>
+    <section className="bg-white">
+      <div className="mx-auto max-w-[1280px] px-4 py-12 md:px-16 md:py-14">
+        <div className="mb-7">
+          <SectionHeading
+            eyebrow="Cara Program Berjalan"
+            title="Dari ide sampai menjadi aksi nyata."
+            description="Program YOLO tidak hanya dibuat, tapi juga dijalankan, dipelajari, dan dikembangkan."
+          />
         </div>
 
-        <div className="grid gap-5 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {flows.map((item, index) => (
             <article
               key={item.title}
-              className="rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-[#e0e0ff]"
+              className="rounded-[1.5rem] border border-[#e0e0ff] bg-[#fbf8ff] p-5"
             >
-              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#006399] text-sm font-bold text-white">
+              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-full bg-[#006399] text-sm font-bold text-white">
                 {index + 1}
               </div>
 
-              <h3 className="text-xl font-bold text-[#000767]">{item.title}</h3>
+              <h3 className="text-lg font-bold text-[#000767]">{item.title}</h3>
 
-              <p className="mt-3 leading-7 text-[#3f4851]">
+              <p className="mt-2 text-sm leading-6 text-[#3f4851]">
                 {item.description}
               </p>
             </article>
@@ -298,125 +347,75 @@ function ProgramFlow() {
   );
 }
 
-/* SVG Icons */
-
-function IconArrowRight(props: IconProps) {
+function ProgramCta() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      {...props}
-    >
-      <path
-        d="M5 12h14M13 6l6 6-6 6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <section className="bg-[#fbf8ff]">
+      <div className="mx-auto max-w-[1280px] px-4 py-12 md:px-16 md:py-14">
+        <div className="rounded-[2rem] bg-[#28305F] p-7 text-white md:p-9">
+          <div className="grid gap-7 md:grid-cols-[1fr_0.8fr] md:items-center">
+            <div>
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[#95ccff]">
+                Ikut Bergerak
+              </p>
+
+              <h2 className="text-2xl font-bold leading-tight md:text-3xl">
+                Mau ikut program YOLO?
+              </h2>
+
+              <p className="mt-3 max-w-2xl leading-7 text-white/70">
+                Kamu bisa ikut kegiatan, menjadi relawan, atau bertanya dulu
+                tentang program yang sedang berjalan.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
+              <Link
+                href="/kegiatan"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
+              >
+                Lihat Kegiatan
+                <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+              </Link>
+
+              <Link
+                href={yoloLinks.askAdmin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10"
+              >
+                <MessageCircle className="h-4 w-4" strokeWidth={2.4} />
+                Tanya Admin
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
-function IconSpark(props: IconProps) {
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+}) {
   return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <path
-        d="M32 4l5.8 18.2L56 28l-18.2 5.8L32 52l-5.8-18.2L8 28l18.2-5.8L32 4z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+    <div>
+      <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
+        {eyebrow}
+      </p>
 
-function IconBook(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <path
-        d="M10 14c0-4 3-7 7-7h12c5 0 9 4 9 9v38c0-5-4-9-9-9H17c-4 0-7 3-7 7V14z"
-        fill="currentColor"
-      />
-      <path
-        d="M54 14c0-4-3-7-7-7H35c-5 0-9 4-9 9v38c0-5 4-9 9-9h12c4 0 7 3 7 7V14z"
-        fill="currentColor"
-        opacity="0.55"
-      />
-    </svg>
-  );
-}
+      <h2 className="max-w-xl text-2xl font-bold leading-tight text-[#000767] md:text-3xl">
+        {title}
+      </h2>
 
-function IconHands(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <path
-        d="M20 36l10 10c3 3 7 3 10 0l11-11c3-3 3-8 0-11s-8-3-11 0l-2 2-2-2c-3-3-8-3-11 0s-3 8 0 11"
-        fill="currentColor"
-      />
-      <path
-        d="M8 34l12 12M56 34L44 46M18 50h28"
-        stroke="currentColor"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function IconPeople(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <circle cx="24" cy="22" r="10" fill="currentColor" />
-      <circle cx="44" cy="26" r="8" fill="currentColor" opacity="0.6" />
-      <path d="M8 55c2-12 9-18 18-18s16 6 18 18H8z" fill="currentColor" />
-      <path
-        d="M34 55c1-8 6-13 13-13 6 0 11 5 13 13H34z"
-        fill="currentColor"
-        opacity="0.6"
-      />
-    </svg>
-  );
-}
-
-function IconTeam(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <rect x="10" y="12" width="44" height="40" rx="8" fill="currentColor" />
-      <path
-        d="M22 28h20M22 38h14"
-        stroke="white"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function IconSunrise(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <path
-        d="M12 44a20 20 0 0140 0"
-        stroke="currentColor"
-        strokeWidth="7"
-        strokeLinecap="round"
-      />
-      <path
-        d="M8 48h48M32 10v10M14 18l7 7M50 18l-7 7"
-        stroke="currentColor"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function IconHeart(props: IconProps) {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" {...props}>
-      <path
-        d="M32 54S10 41 10 24c0-8 6-14 14-14 5 0 8 2 10 6 2-4 6-6 10-6 8 0 14 6 14 14 0 17-26 30-26 30z"
-        fill="currentColor"
-      />
-    </svg>
+      {description ? (
+        <p className="mt-3 max-w-xl leading-7 text-[#3f4851]">{description}</p>
+      ) : null}
+    </div>
   );
 }
