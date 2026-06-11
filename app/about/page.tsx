@@ -8,36 +8,19 @@ import {
   yoloMissions,
   yoloProfile,
   yoloPrograms,
-  yoloTeam,
   yoloVision,
 } from "@/data/yolo";
 import type { Metadata } from "next";
 import { ArrowRight, Mail, MessageCircle } from "lucide-react";
+import { getYoloTeamMembers } from "@/lib/notion-team";
+import type { YoloTeamMember } from "@/lib/notion-team";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Tentang Kami - YOLO",
   description:
     "Kenali YOLO, Young Muslim's Life Community, komunitas kepemudaan yang bergerak di bidang pendidikan dan sosial.",
-};
-
-const teamPhotos: Record<string, string> = {
-  "Nurhaeti Edi P":
-    "https://placehold.co/700x900/e0e0ff/006399?text=Nurhaeti",
-  "Depi Riyanti": "https://placehold.co/700x900/e0e0ff/006399?text=Depi",
-  "Alanisa N": "https://placehold.co/700x900/e0e0ff/006399?text=Alanisa",
-  "Annisa Pebriani":
-    "https://placehold.co/700x900/e0e0ff/006399?text=Annisa",
-  "Anita Sri P": "https://placehold.co/700x900/e0e0ff/006399?text=Anita",
-  Salis: "https://placehold.co/700x900/e0e0ff/006399?text=Salis",
-  "M. Nizar": "https://placehold.co/700x900/e0e0ff/006399?text=Nizar",
-  "Alanisa Nabilah":
-    "https://placehold.co/700x900/e0e0ff/006399?text=Nabilah",
-};
-
-const aboutImages = {
-  hero: "https://placehold.co/1200x800/e0e0ff/006399?text=Foto+Kegiatan+YOLO",
-  profile:
-    "https://placehold.co/900x700/e0e0ff/006399?text=Foto+Komunitas+YOLO",
 };
 
 const featuredPrograms = yoloPrograms.slice(0, 6);
@@ -52,7 +35,17 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const teamMembers = await getYoloTeamMembers();
+
+  const activeTeam = teamMembers.filter(
+    (member) => member.status.toLowerCase() === "aktif",
+  );
+
+  const demisionerTeam = teamMembers.filter(
+    (member) => member.status.toLowerCase() === "demisioner",
+  );
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#fbf8ff] text-[#000767]">
       <Navbar />
@@ -60,7 +53,7 @@ export default function AboutPage() {
       <AboutHero />
       <ProfileSection />
       <VisionMissionSection />
-      <TeamSection />
+      <TeamSection activeTeam={activeTeam} demisionerTeam={demisionerTeam} />
       <MembersSection />
       <ProgramsSection />
       <ContactSection />
@@ -231,7 +224,13 @@ function VisionMissionSection() {
   );
 }
 
-function TeamSection() {
+function TeamSection({
+  activeTeam,
+  demisionerTeam,
+}: {
+  activeTeam: YoloTeamMember[];
+  demisionerTeam: YoloTeamMember[];
+}) {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1280px] px-4 py-14 md:px-16 md:py-16">
@@ -243,38 +242,116 @@ function TeamSection() {
           />
 
           <p className="text-sm font-semibold text-[#006399]">
-            {yoloTeam.length} Pengurus
+            {activeTeam.length} Pengurus Aktif
           </p>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {yoloTeam.map((member) => (
-            <article
-              key={`${member.name}-${member.role}`}
-              className="overflow-hidden rounded-[1.5rem] border border-[#e0e0ff] bg-[#fbf8ff] transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70"
-            >
-              <div className="aspect-[4/5] overflow-hidden bg-[#e0e0ff]">
-                <img
-                  src={member.photo}
-                  alt={`Foto ${member.name}`}
-                  className="h-full w-full object-cover"
-                />
-              </div>
+        {activeTeam.length > 0 ? (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {activeTeam.map((member) => (
+              <TeamCard key={member.id} member={member} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState text="Data pengurus aktif belum tersedia." />
+        )}
 
-              <div className="p-4">
-                <h3 className="text-base font-bold leading-tight text-[#000767]">
-                  {member.name}
-                </h3>
+        <div className="mt-14">
+          <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <SectionHeading
+              eyebrow="Demisioner"
+              title="Alumni pengurus YOLO."
+              description="Mereka yang pernah ikut membangun perjalanan YOLO dan menjadi bagian dari perkembangan komunitas."
+            />
 
-                <p className="mt-1 text-sm font-semibold text-[#006399]">
-                  {member.role}
-                </p>
-              </div>
-            </article>
-          ))}
+            <p className="text-sm font-semibold text-[#006399]">
+              {demisionerTeam.length} Alumni Pengurus
+            </p>
+          </div>
+
+          {demisionerTeam.length > 0 ? (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {demisionerTeam.map((member) => (
+                <TeamCard key={member.id} member={member} isDemisioner />
+              ))}
+            </div>
+          ) : (
+            <EmptyState text="Data demisioner belum tersedia." />
+          )}
         </div>
       </div>
     </section>
+  );
+}
+
+function TeamCard({
+  member,
+  isDemisioner = false,
+}: {
+  member: YoloTeamMember;
+  isDemisioner?: boolean;
+}) {
+  return (
+    <article
+      className={`overflow-hidden rounded-[1.5rem] border border-[#e0e0ff] transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70 ${
+        isDemisioner ? "bg-white" : "bg-[#fbf8ff]"
+      }`}
+    >
+      <div className="aspect-[4/5] overflow-hidden bg-[#e0e0ff]">
+        {member.photo ? (
+          <img
+            src={member.photo}
+            alt={`Foto ${member.name}`}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-[#cde5ff] text-3xl font-bold text-[#006399]">
+            {getInitials(member.name)}
+          </div>
+        )}
+      </div>
+
+      <div className="p-4">
+        <div className="mb-3 flex flex-wrap gap-2">
+          {member.division ? (
+            <span className="rounded-full bg-[#cde5ff] px-3 py-1 text-[11px] font-bold text-[#006399]">
+              {member.division}
+            </span>
+          ) : null}
+
+          {member.period ? (
+            <span className="rounded-full bg-[#f4f2ff] px-3 py-1 text-[11px] font-bold text-[#3f4851]">
+              {member.period}
+            </span>
+          ) : null}
+        </div>
+
+        <h3 className="text-base font-bold leading-tight text-[#000767]">
+          {member.name}
+        </h3>
+
+        <p className="mt-1 text-sm font-semibold text-[#006399]">
+          {member.role}
+        </p>
+
+        {member.description ? (
+          <p className="mt-3 line-clamp-3 text-sm leading-6 text-[#3f4851]">
+            {member.description}
+          </p>
+        ) : null}
+
+        {member.instagram ? (
+          <Link
+            href={member.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex text-sm font-bold text-[#006399] transition hover:text-[#1da1f2]"
+          >
+            Instagram
+          </Link>
+        ) : null}
+      </div>
+    </article>
   );
 }
 
@@ -395,6 +472,14 @@ function ContactSection() {
   );
 }
 
+function EmptyState({ text }: { text: string }) {
+  return (
+    <div className="rounded-[1.5rem] border border-dashed border-[#cbd5e1] bg-[#fbf8ff] p-8 text-center">
+      <p className="text-sm font-semibold text-[#3f4851]">{text}</p>
+    </div>
+  );
+}
+
 function SectionHeading({
   eyebrow,
   title,
@@ -415,9 +500,7 @@ function SectionHeading({
       </h2>
 
       {description ? (
-        <p className="mt-3 max-w-xl leading-7 text-[#3f4851]">
-          {description}
-        </p>
+        <p className="mt-3 max-w-xl leading-7 text-[#3f4851]">{description}</p>
       ) : null}
     </div>
   );
