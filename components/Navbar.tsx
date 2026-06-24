@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X, HeartHandshake } from "lucide-react";
 import { navItems } from "@/data/navigation";
-import { yoloContacts, yoloProfile } from "@/data/yolo";
+import { yoloContacts } from "@/data/yolo";
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/") {
@@ -35,29 +35,22 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e0e0ff] bg-[#fbf8ff]/90 backdrop-blur-xl">
-      <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-4 md:px-16">
+      <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3 md:px-16">
         <Link
           href="/"
           onClick={() => setIsOpen(false)}
-          className="flex items-center gap-3"
+          className="inline-flex items-center"
+          aria-label="YOLO Homepage"
         >
-          <Image
-            src="/images/logo.jpg"
-            alt="YOLO Logo"
-            width={44}
-            height={44}
-            className="rounded-full object-contain ring-1 ring-[#e0e0ff]"
-            priority
-          />
-
-          <div>
-            <p className="text-lg font-bold leading-none text-[#006399]">
-              {yoloProfile.name}
-            </p>
-
-            <p className="mt-1 hidden text-xs font-semibold text-[#3f4851] sm:block">
-              {yoloProfile.fullName}
-            </p>
+          <div className="relative flex h-11 w-[160px] items-center md:h-12 md:w-[158px]">
+            <Image
+              src="/images/logo_yolo.png"
+              alt="YOLO Logo"
+              fill
+              sizes="(max-width: 768px) 140px, 158px"
+              className="object-contain"
+              priority
+            />
           </div>
         </Link>
 
