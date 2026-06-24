@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 const featuredPrograms = yoloPrograms.slice(0, 4);
 
 const homeImages = {
-  hero: "https://i.pinimg.com/control1/1200x/f1/c7/6e/f1c76e928249c329884bb3f68d710062.jpg",
+  hero: "https://i.pinimg.com/1200x/b3/81/e5/b381e5956290821742be5fe92c749777.jpg",
 };
 
 type Activity = Awaited<ReturnType<typeof getYoloActivities>>[number];

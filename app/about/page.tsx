@@ -114,7 +114,7 @@ function AboutHero() {
 
             <div className="relative overflow-hidden rounded-[2rem] border border-[#e0e0ff] bg-white p-3 shadow-sm">
               <img
-                src="https://i.pinimg.com/736x/29/a3/ce/29a3cec52be44eff8d110c77fad767ee.jpg"
+                src="https://i.pinimg.com/736x/38/9f/45/389f458263ae257a6b9fce536b9da8c2.jpg"
                 alt="Foto kegiatan YOLO"
                 className="aspect-[16/10] w-full rounded-[1.5rem] object-cover"
               />
@@ -147,7 +147,7 @@ function ProfileSection() {
       <div className="mx-auto grid max-w-[1280px] gap-8 px-4 py-14 md:px-16 md:py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
         <div className="overflow-hidden rounded-[2rem] border border-[#e0e0ff] bg-[#f4f2ff] p-3">
           <img
-            src="https://i.pinimg.com/control1/736x/d1/70/58/d17058a384827b858f5c4a90bfe748ea.jpg"
+            src="https://i.pinimg.com/736x/81/5a/65/815a65967682f0c90a7bfd35293ae370.jpg"
             alt="Foto komunitas YOLO"
             className="aspect-[4/3] w-full rounded-[1.5rem] object-cover"
           />
