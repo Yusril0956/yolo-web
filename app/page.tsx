@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SafeImage from "@/components/SafeImage";
+import SectionHeading from "@/components/ui/SectionHeading";
 import { getYoloActivities } from "@/lib/notion";
 import {
   yoloContacts,
@@ -19,7 +20,6 @@ import {
   MapPin,
   MessageCircle,
   Sparkles,
-  UsersRound,
   Handshake,
 } from "lucide-react";
 
@@ -432,31 +432,5 @@ function ContactSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-function SectionHeading({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  description?: string;
-}) {
-  return (
-    <div>
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
-        {eyebrow}
-      </p>
-
-      <h2 className="max-w-xl text-2xl font-bold leading-tight text-[#000767] md:text-3xl">
-        {title}
-      </h2>
-
-      {description ? (
-        <p className="mt-3 max-w-xl leading-7 text-[#3f4851]">{description}</p>
-      ) : null}
-    </div>
   );
 }

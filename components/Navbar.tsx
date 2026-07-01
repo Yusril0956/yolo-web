@@ -43,15 +43,9 @@ export default function Navbar() {
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     function handleScroll() {
       setHasScrolled(window.scrollY > 8);
     }
-
-    handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 

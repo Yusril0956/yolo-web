@@ -1,4 +1,16 @@
+import "server-only";
+
 import { Client } from "@notionhq/client";
+import { cache } from "react";
+import {
+  getDateRange,
+  getFiles,
+  getSelectName,
+  getText,
+  getUrl,
+  isFullPage,
+} from "@/lib/notion-properties";
+import type { NotionPageProperties } from "@/lib/notion-properties";
 
 export type YoloActivity = {
   id: string;
@@ -82,91 +94,6 @@ function getFriendlyError(error: unknown) {
   return message;
 }
 
-function getPlainTextFromItems(items: any[] | undefined) {
-  if (!items) return "";
-
-  return items
-    .map((item) => item?.plain_text ?? "")
-    .join("")
-    .trim();
-}
-
-function getPlainText(properties: any, propertyName: string) {
-  const property = properties?.[propertyName];
-
-  if (!property) return "";
-
-  if (property.type === "title") {
-    return getPlainTextFromItems(property.title);
-  }
-
-  if (property.type === "rich_text") {
-    return getPlainTextFromItems(property.rich_text);
-  }
-
-  if (property.type === "phone_number") {
-    return property.phone_number ?? "";
-  }
-
-  if (property.type === "email") {
-    return property.email ?? "";
-  }
-
-  return "";
-}
-
-function getSelectName(properties: any, propertyName: string) {
-  const property = properties?.[propertyName];
-
-  if (!property || property.type !== "select") return "";
-
-  return property.select?.name ?? "";
-}
-
-function getDateRange(properties: any, propertyName: string) {
-  const property = properties?.[propertyName];
-
-  if (!property || property.type !== "date") {
-    return {
-      start: "",
-      end: "",
-    };
-  }
-
-  return {
-    start: property.date?.start ?? "",
-    end: property.date?.end ?? "",
-  };
-}
-
-function getUrl(properties: any, propertyName: string) {
-  const property = properties?.[propertyName];
-
-  if (!property || property.type !== "url") return "";
-
-  return property.url ?? "";
-}
-
-function getFiles(properties: any, propertyName: string) {
-  const property = properties?.[propertyName];
-
-  if (!property || property.type !== "files") return [];
-
-  return property.files
-    .map((file: any) => {
-      if (file.type === "external") {
-        return file.external?.url ?? "";
-      }
-
-      if (file.type === "file") {
-        return file.file?.url ?? "";
-      }
-
-      return "";
-    })
-    .filter(Boolean);
-}
-
 function formatSingleDate(date: string) {
   if (!date) return "";
 
@@ -205,31 +132,31 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-function mapNotionPageToActivity(page: any): YoloActivity {
-  const properties = page.properties ?? {};
+function mapNotionPageToActivity(page: { id: string; properties: NotionPageProperties }): YoloActivity {
+  const properties = page.properties;
 
-  const title = getPlainText(properties, "Judul") || "Tanpa Judul";
-  const slugFromNotion = getPlainText(properties, "Slug");
-  const dateRange = getDateRange(properties, "Tanggal");
+  const title = getText(properties, ["Judul"]) || "Tanpa Judul";
+  const slugFromNotion = getText(properties, ["Slug"]);
+  const dateRange = getDateRange(properties, ["Tanggal"]);
   const rawDate = dateRange.start;
   const rawEndDate = dateRange.end;
-  const gallery = getFiles(properties, "Galeri");
+  const gallery = getFiles(properties, ["Galeri"]);
 
   return {
     id: page.id,
     title,
     slug: slugFromNotion || slugify(title),
-    category: getSelectName(properties, "Kategori") || "Kegiatan",
-    status: getSelectName(properties, "Status") || "Published",
+    category: getSelectName(properties, ["Kategori"]) || "Kegiatan",
+    status: getSelectName(properties, ["Status"]) || "Published",
     date: formatDateRange(rawDate, rawEndDate),
     rawDate,
     rawEndDate,
-    location: getPlainText(properties, "Lokasi") || "Lokasi menyusul",
-    description: getPlainText(properties, "Deskripsi"),
-    poster: getFiles(properties, "Poster")[0] ?? "",
+    location: getText(properties, ["Lokasi"]) || "Lokasi menyusul",
+    description: getText(properties, ["Deskripsi"]),
+    poster: getFiles(properties, ["Poster"])[0] ?? "",
     gallery: gallery.slice(0, 6),
-    registrationLink: getUrl(properties, "Link Daftar"),
-    documentationLink: getUrl(properties, "Link Dokumentasi"),
+    registrationLink: getUrl(properties, ["Link Daftar"]),
+    documentationLink: getUrl(properties, ["Link Dokumentasi"]),
   };
 }
 
@@ -254,6 +181,7 @@ export async function getYoloActivities() {
     });
 
     return response.results
+      .filter(isFullPage)
       .map(mapNotionPageToActivity)
       .filter((activity) => activity.title !== "Tanpa Judul");
   } catch (error) {
@@ -261,7 +189,9 @@ export async function getYoloActivities() {
   }
 }
 
-export async function getYoloActivityBySlug(slug: string) {
+export const getYoloActivityBySlug = cache(async function getYoloActivityBySlug(
+  slug: string,
+) {
   assertNotionEnv();
 
   try {
@@ -286,7 +216,7 @@ export async function getYoloActivityBySlug(slug: string) {
       page_size: 1,
     });
 
-    const page = response.results[0];
+    const page = response.results.find(isFullPage);
 
     if (page) {
       return mapNotionPageToActivity(page);
@@ -302,4 +232,4 @@ export async function getYoloActivityBySlug(slug: string) {
   const activities = await getYoloActivities();
 
   return activities.find((activity) => activity.slug === slug) ?? null;
-}
+});

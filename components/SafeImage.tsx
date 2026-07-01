@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import type { SVGProps } from "react";
 
@@ -11,6 +12,8 @@ type SafeImageProps = {
   className?: string;
   fallbackClassName?: string;
   fallbackLabel?: string;
+  sizes?: string;
+  priority?: boolean;
 };
 
 export default function SafeImage({
@@ -19,6 +22,8 @@ export default function SafeImage({
   className = "",
   fallbackClassName = "",
   fallbackLabel = "Gambar belum tersedia",
+  sizes = "(max-width: 768px) 100vw, 50vw",
+  priority = false,
 }: SafeImageProps) {
   const [hasError, setHasError] = useState(false);
 
@@ -39,13 +44,17 @@ export default function SafeImage({
   }
 
   return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      onError={() => setHasError(true)}
-      loading="lazy"
-    />
+    <span className={`relative block overflow-hidden ${className}`}>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes}
+        priority={priority}
+        className="object-cover"
+        onError={() => setHasError(true)}
+      />
+    </span>
   );
 }
 

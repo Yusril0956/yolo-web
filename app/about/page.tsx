@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SafeImage from "@/components/SafeImage";
+import SectionHeading from "@/components/ui/SectionHeading";
 import {
-  yoloContacts,
   yoloLinks,
   yoloMembers,
   yoloMissions,
@@ -11,7 +12,7 @@ import {
   yoloVision,
 } from "@/data/yolo";
 import type { Metadata } from "next";
-import { ArrowRight, Mail, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getYoloTeamMembers } from "@/lib/notion-team";
 import type { YoloTeamMember } from "@/lib/notion-team";
 
@@ -112,10 +113,13 @@ function AboutHero() {
             <div className="absolute -bottom-5 -left-5 h-20 w-20 rounded-br-[2.5rem] bg-[#df8400]/80" />
 
             <div className="relative overflow-hidden rounded-[2rem] border border-[#e0e0ff] bg-white p-3 shadow-sm">
-              <img
+              <SafeImage
                 src="https://i.pinimg.com/736x/38/9f/45/389f458263ae257a6b9fce536b9da8c2.jpg"
                 alt="Foto kegiatan YOLO"
                 className="aspect-[16/10] w-full rounded-[1.5rem] object-cover"
+                fallbackClassName="aspect-[16/10] w-full rounded-[1.5rem]"
+                fallbackLabel="Foto kegiatan YOLO"
+                priority
               />
 
               <div className="mt-3 grid grid-cols-3 gap-2">
@@ -145,10 +149,12 @@ function ProfileSection() {
     <section className="bg-white">
       <div className="mx-auto grid max-w-[1280px] gap-8 px-4 py-14 md:px-16 md:py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
         <div className="overflow-hidden rounded-[2rem] border border-[#e0e0ff] bg-[#f4f2ff] p-3">
-          <img
+          <SafeImage
             src="https://i.pinimg.com/736x/81/5a/65/815a65967682f0c90a7bfd35293ae370.jpg"
             alt="Foto komunitas YOLO"
             className="aspect-[4/3] w-full rounded-[1.5rem] object-cover"
+            fallbackClassName="aspect-[4/3] w-full rounded-[1.5rem]"
+            fallbackLabel="Foto komunitas YOLO"
           />
         </div>
 
@@ -298,10 +304,12 @@ function TeamCard({
     >
       <div className="aspect-[4/5] overflow-hidden bg-[#e0e0ff]">
         {member.photo ? (
-          <img
+          <SafeImage
             src={member.photo}
             alt={`Foto ${member.name}`}
             className="h-full w-full object-cover"
+            fallbackClassName="h-full w-full"
+            fallbackLabel={`Foto ${member.name}`}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-[#cde5ff] text-3xl font-bold text-[#006399]">
@@ -433,28 +441,3 @@ function EmptyState({ text }: { text: string }) {
   );
 }
 
-function SectionHeading({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  description?: string;
-}) {
-  return (
-    <div>
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
-        {eyebrow}
-      </p>
-
-      <h2 className="max-w-xl text-2xl font-bold leading-tight text-[#000767] md:text-3xl">
-        {title}
-      </h2>
-
-      {description ? (
-        <p className="mt-3 max-w-xl leading-7 text-[#3f4851]">{description}</p>
-      ) : null}
-    </div>
-  );
-}

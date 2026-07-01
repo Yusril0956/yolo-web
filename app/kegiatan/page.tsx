@@ -12,7 +12,6 @@ import {
   ImageIcon,
   MapPin,
   MessageCircle,
-  Sparkles,
 } from "lucide-react";
 
 export const revalidate = 300;
@@ -34,7 +33,7 @@ export default async function KegiatanPage() {
 
       <section className="bg-[#fbf8ff]">
         <div className="mx-auto max-w-[1280px] px-4 py-14 md:px-16 md:py-16">
-          <PageHeader total={activities.length} />
+          <PageHeader />
 
           {activities.length > 0 ? (
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -53,7 +52,7 @@ export default async function KegiatanPage() {
   );
 }
 
-function PageHeader({ total }: { total: number }) {
+function PageHeader() {
   return (
     <div className="mb-9 grid gap-6 lg:grid-cols-[1fr_360px] lg:items-end">
       <div className="max-w-3xl">

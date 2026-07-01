@@ -1,4 +1,13 @@
+import "server-only";
+
 import { Client } from "@notionhq/client";
+import {
+  getFiles,
+  getNumber,
+  getText,
+  isFullPage,
+} from "@/lib/notion-properties";
+import type { NotionPageProperties } from "@/lib/notion-properties";
 
 export type YoloTeamMember = {
   id: string;
@@ -69,76 +78,11 @@ async function withRetry<T>(callback: () => Promise<T>) {
   throw lastError;
 }
 
-function getProperty(properties: any, names: string[]) {
-  for (const name of names) {
-    if (properties?.[name]) {
-      return properties[name];
-    }
-  }
-
-  return null;
-}
-
-function getText(properties: any, names: string[]) {
-  const property = getProperty(properties, names);
-
-  if (!property) return "";
-
-  if (property.type === "title") {
-    return property.title
-      ?.map((item: any) => item.plain_text ?? "")
-      .join("")
-      .trim();
-  }
-
-  if (property.type === "rich_text") {
-    return property.rich_text
-      ?.map((item: any) => item.plain_text ?? "")
-      .join("")
-      .trim();
-  }
-
-  if (property.type === "select") {
-    return property.select?.name ?? "";
-  }
-
-  if (property.type === "url") {
-    return property.url ?? "";
-  }
-
-  return "";
-}
-
-function getNumber(properties: any, names: string[]) {
-  const property = getProperty(properties, names);
-
-  if (!property || property.type !== "number") return 999;
-
-  return property.number ?? 999;
-}
-
-function getFiles(properties: any, names: string[]) {
-  const property = getProperty(properties, names);
-
-  if (!property || property.type !== "files") return [];
-
-  return property.files
-    .map((file: any) => {
-      if (file.type === "external") {
-        return file.external?.url ?? "";
-      }
-
-      if (file.type === "file") {
-        return file.file?.url ?? "";
-      }
-
-      return "";
-    })
-    .filter(Boolean);
-}
-
-function mapNotionPageToTeamMember(page: any): YoloTeamMember {
-  const properties = page.properties ?? {};
+function mapNotionPageToTeamMember(page: {
+  id: string;
+  properties: NotionPageProperties;
+}): YoloTeamMember {
+  const properties = page.properties;
 
   return {
     id: page.id,
@@ -179,6 +123,7 @@ export async function getYoloTeamMembers() {
     );
 
     const members = response.results
+      .filter(isFullPage)
       .map(mapNotionPageToTeamMember)
       .filter((member) => member.name !== "Tanpa Nama");
 

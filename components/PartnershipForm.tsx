@@ -62,7 +62,13 @@ export default function PartnershipForm() {
         body: JSON.stringify(form),
       });
 
-      const result = await response.json();
+      const result = (await response.json().catch(() => ({
+        success: false,
+        message: "Respons server tidak valid.",
+      }))) as {
+        success?: boolean;
+        message?: string;
+      };
 
       if (!response.ok || !result.success) {
         throw new Error(result.message || "Pengajuan gagal dikirim.");
@@ -86,15 +92,18 @@ export default function PartnershipForm() {
       onSubmit={handleSubmit}
       className="rounded-[2rem] border border-[#d9d9f5] bg-white p-5 shadow-sm md:p-7"
     >
-      <input
-        type="text"
-        name="website"
-        value={form.website}
-        onChange={updateField}
-        className="hidden"
-        tabIndex={-1}
-        autoComplete="off"
-      />
+      <div aria-hidden="true" className="sr-only">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          type="text"
+          name="website"
+          value={form.website}
+          onChange={updateField}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
 
       <div className="border-b border-[#d9d9f5] pb-5">
         <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
@@ -246,14 +255,22 @@ export default function PartnershipForm() {
       </div>
 
       {successMessage ? (
-        <div className="mt-5 flex gap-3 rounded-2xl border border-green-200 bg-green-50 p-4 text-sm font-semibold text-green-700">
+        <div
+          className="mt-5 flex gap-3 rounded-2xl border border-green-200 bg-green-50 p-4 text-sm font-semibold text-green-700"
+          role="status"
+          aria-live="polite"
+        >
           <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" />
           <p>{successMessage}</p>
         </div>
       ) : null}
 
       {errorMessage ? (
-        <div className="mt-5 flex gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
+        <div
+          className="mt-5 flex gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700"
+          role="alert"
+          aria-live="assertive"
+        >
           <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
           <p>{errorMessage}</p>
         </div>
@@ -268,7 +285,7 @@ export default function PartnershipForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#006399] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isSubmitting ? (
             <>

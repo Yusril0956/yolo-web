@@ -11,10 +11,10 @@ import {
   Megaphone,
   MessageCircle,
   Sparkles,
-  Users,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BaseSectionHeading from "@/components/ui/SectionHeading";
 import { yoloContacts, yoloLinks, yoloProfile } from "@/data/yolo";
 
 export const metadata: Metadata = {
@@ -409,18 +409,12 @@ function SectionHeading({
   description?: string;
 }) {
   return (
-    <div>
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
-        {eyebrow}
-      </p>
-
-      <h2 className="max-w-xl text-2xl font-bold leading-tight text-[#000767] md:text-4xl md:leading-[1.14]">
-        {title}
-      </h2>
-
-      {description ? (
-        <p className="mt-4 max-w-xl leading-7 text-[#3f4851]">{description}</p>
-      ) : null}
-    </div>
+    <BaseSectionHeading
+      eyebrow={eyebrow}
+      title={title}
+      description={description}
+      titleClassName="md:text-4xl md:leading-[1.14]"
+      descriptionMarginClassName="mt-4"
+    />
   );
 }

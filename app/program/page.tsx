@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SectionHeading from "@/components/ui/SectionHeading";
 import { yoloLinks, yoloPrograms, yoloProfile } from "@/data/yolo";
 import {
   ArrowRight,
@@ -394,28 +394,3 @@ function ProgramCta() {
   );
 }
 
-function SectionHeading({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  description?: string;
-}) {
-  return (
-    <div>
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
-        {eyebrow}
-      </p>
-
-      <h2 className="max-w-xl text-2xl font-bold leading-tight text-[#000767] md:text-3xl">
-        {title}
-      </h2>
-
-      {description ? (
-        <p className="mt-3 max-w-xl leading-7 text-[#3f4851]">{description}</p>
-      ) : null}
-    </div>
-  );
-}
