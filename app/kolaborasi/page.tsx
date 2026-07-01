@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
   BookOpen,
@@ -10,12 +11,10 @@ import {
   Megaphone,
   MessageCircle,
   Sparkles,
-  Target,
   Users,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import PartnershipForm from "@/components/PartnershipForm";
 import { yoloContacts, yoloLinks, yoloProfile } from "@/data/yolo";
 
 export const metadata: Metadata = {
@@ -24,65 +23,66 @@ export const metadata: Metadata = {
     "Ajakan kolaborasi bersama YOLO untuk program pendidikan, sosial, pembinaan, media partner, dan kegiatan komunitas.",
 };
 
-const partnershipLink =
-  "https://wa.me/6285871786258?text=Assalamu%27alaikum%2C%20saya%20ingin%20mengajak%20YOLO%20untuk%20berkolaborasi.";
-
-const collaborationTypes = [
+const collaborationTypes: {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+}[] = [
   {
     title: "Kolaborasi Program",
     description:
-      "Kerja sama dalam pelaksanaan program pendidikan, sosial, pembinaan, atau kegiatan komunitas.",
+      "Mengadakan kegiatan pendidikan, sosial, pembinaan, atau kelas bersama YOLO.",
     icon: HandHeart,
   },
   {
     title: "Media Partner",
     description:
-      "Kolaborasi publikasi kegiatan, kampanye sosial, dokumentasi, dan penyebaran informasi positif.",
+      "Mendukung publikasi kegiatan, kampanye sosial, dokumentasi, dan penyebaran informasi positif.",
     icon: Megaphone,
   },
   {
     title: "Dukungan Pendidikan",
     description:
-      "Bentuk dukungan berupa kelas, pelatihan, mentoring, sharing session, atau fasilitas belajar.",
+      "Berbagi ilmu melalui mentoring, sharing session, kelas, pelatihan, atau fasilitas belajar.",
     icon: BookOpen,
   },
   {
-    title: "Sponsorship Kegiatan",
+    title: "Sponsorship",
     description:
-      "Dukungan berupa dana, barang, konsumsi, tempat, perlengkapan, atau kebutuhan kegiatan.",
+      "Mendukung kegiatan dalam bentuk dana, barang, konsumsi, tempat, perlengkapan, atau kebutuhan program.",
     icon: Building2,
   },
 ];
 
 const partnerTargets = [
-  "Komunitas sosial dan pendidikan",
-  "Sekolah, kampus, atau lembaga pendidikan",
-  "Brand atau UMKM yang punya kepedulian sosial",
-  "Media partner dan creative team",
-  "Lembaga zakat, donasi, atau filantropi",
-  "Individu yang ingin berkontribusi",
+  "Komunitas sosial",
+  "Sekolah atau kampus",
+  "Brand dan UMKM",
+  "Media partner",
+  "Lembaga pendidikan",
+  "Individu relawan",
 ];
 
 const collaborationSteps = [
   {
-    title: "Hubungi YOLO",
+    title: "Ajukan ide",
     description:
-      "Partner dapat menghubungi admin YOLO melalui WhatsApp atau email untuk menyampaikan ide kerja sama.",
+      "Ceritakan bentuk kolaborasi, tujuan, dan kebutuhan kegiatan melalui form pengajuan.",
   },
   {
-    title: "Diskusi kebutuhan",
+    title: "Diskusi konsep",
     description:
-      "Kita bahas bentuk kolaborasi, tujuan kegiatan, target peserta, waktu, dan kebutuhan teknis.",
+      "Tim YOLO akan meninjau pengajuan dan berdiskusi untuk menyamakan kebutuhan.",
   },
   {
-    title: "Rancang konsep",
+    title: "Rancang kegiatan",
     description:
-      "YOLO dan partner menyusun konsep kegiatan agar kerja sama berjalan jelas, rapi, dan berdampak.",
+      "Konsep, timeline, pembagian peran, dan kebutuhan teknis disusun bersama.",
   },
   {
-    title: "Eksekusi kegiatan",
+    title: "Jalankan program",
     description:
-      "Kegiatan dijalankan bersama dengan koordinasi, dokumentasi, dan evaluasi setelah program selesai.",
+      "Kegiatan dieksekusi, didokumentasikan, lalu dievaluasi untuk pengembangan berikutnya.",
   },
 ];
 
@@ -92,12 +92,11 @@ export default function KolaborasiPage() {
       <Navbar />
 
       <HeroSection />
-      <WhyCollaborateSection />
+      <CollaborationIntroSection />
       <CollaborationTypesSection />
-      <PartnershipFormSection />
-      <PartnerTargetSection />
-      <StepsSection />
-      <ContactCTASection />
+      <PartnerSection />
+      <ProcessSection />
+      <FinalCTASection />
 
       <Footer />
     </main>
@@ -106,74 +105,77 @@ export default function KolaborasiPage() {
 
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-[#fbf8ff]">
-      <div className="absolute -left-20 top-28 h-64 w-64 rounded-full bg-[#cde5ff] blur-3xl" />
-      <div className="absolute -right-24 bottom-10 h-72 w-72 rounded-full bg-[#ffdcbe] blur-3xl" />
+    <section className="bg-[#fbf8ff]">
+      <div className="mx-auto max-w-[1180px] px-4 py-14 md:px-8 md:py-20 lg:px-0">
+        <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#006399]">
+              Partnership & Collaboration
+            </p>
 
-      <div className="relative mx-auto grid max-w-[1280px] gap-10 px-4 py-16 md:px-16 md:py-20 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-        <div>
-          <p className="mb-4 text-xs font-bold uppercase tracking-[0.24em] text-[#006399]">
-            Partnership & Collaboration
-          </p>
+            <h1 className="mt-5 max-w-3xl text-4xl font-bold leading-tight tracking-[-0.03em] text-[#000767] md:text-6xl md:leading-[1.04]">
+              Bersama membangun ruang belajar, sosial, dan kebermanfaatan.
+            </h1>
 
-          <h1 className="max-w-3xl text-3xl font-bold leading-tight tracking-[-0.02em] text-[#000767] md:text-5xl md:leading-[1.08]">
-            Mari berkolaborasi untuk menghadirkan manfaat yang lebih luas.
-          </h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-[#3f4851] md:text-lg">
+              {yoloProfile.name} membuka ruang kolaborasi untuk komunitas,
+              sekolah, kampus, brand, lembaga, dan individu yang ingin ikut
+              menghadirkan program positif untuk masyarakat.
+            </p>
 
-          <p className="mt-5 max-w-2xl text-base leading-7 text-[#3f4851] md:text-lg md:leading-8">
-            {yoloProfile.name} membuka ruang kerja sama dengan komunitas,
-            lembaga, brand, sekolah, kampus, dan individu yang ingin ikut
-            mendukung program pendidikan, sosial, dan pembinaan pemuda.
-          </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/kolaborasi/form"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#1da1f2]"
+              >
+                Ajukan Kolaborasi
+                <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
+              </Link>
 
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href={partnershipLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
-            >
-              Ajukan Kolaborasi
-              <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
-            </Link>
-
-            <Link
-              href="/kegiatan"
-              className="inline-flex items-center justify-center rounded-full border border-[#006399] bg-white px-6 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#f4f2ff]"
-            >
-              Lihat Kegiatan YOLO
-            </Link>
+              <Link
+                href={yoloLinks.askAdmin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#006399]/25 bg-white px-6 py-3 text-sm font-bold text-[#006399] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f4f2ff]"
+              >
+                <MessageCircle className="h-4 w-4" strokeWidth={2.4} />
+                Tanya Admin
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <div className="relative">
-          <div className="absolute -right-5 -top-5 h-24 w-24 rounded-bl-[3rem] rounded-tr-[3rem] bg-[#006399]" />
-          <div className="absolute -bottom-5 -left-5 h-20 w-20 rounded-br-[2.5rem] bg-[#df8400]/80" />
+          <div className="rounded-[2rem] border border-[#d9d9f5] bg-white p-5 shadow-sm">
+            <div className="rounded-[1.5rem] bg-[#f7fbff] p-6">
+              <div className="flex items-center justify-between gap-4 border-b border-[#d9d9f5] pb-5">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#006399]">
+                    Collaboration Brief
+                  </p>
+                  <h2 className="mt-2 text-2xl font-bold text-[#000767]">
+                    Untuk siapa?
+                  </h2>
+                </div>
 
-          <div className="relative rounded-[2rem] border border-[#e0e0ff] bg-white p-5 shadow-sm">
-            <div className="rounded-[1.5rem] bg-[#000767] p-7 text-white">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
-                <Sparkles className="h-7 w-7" strokeWidth={2.2} />
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf7ff] text-[#006399]">
+                  <Sparkles className="h-6 w-6" strokeWidth={2.4} />
+                </div>
               </div>
 
-              <p className="mt-8 text-sm font-bold uppercase tracking-[0.22em] text-[#95ccff]">
-                Kolaborasi YOLO
-              </p>
-
-              <h2 className="mt-3 text-2xl font-bold leading-tight md:text-3xl">
-                Tumbuh, Bergerak, dan Bermanfaat.
-              </h2>
-
-              <p className="mt-4 leading-7 text-white/75">
-                Setiap kolaborasi diarahkan untuk membangun ruang belajar,
-                kepedulian sosial, dan gerakan positif untuk masyarakat.
-              </p>
-            </div>
-
-            <div className="mt-3 grid grid-cols-3 gap-2">
-              <HeroStat value="Sosial" label="Program" />
-              <HeroStat value="Edukasi" label="Fokus" />
-              <HeroStat value="Pemuda" label="Gerakan" />
+              <div className="mt-6 grid gap-3">
+                <BriefItem
+                  label="Fokus"
+                  value="Pendidikan, sosial, pembinaan"
+                />
+                <BriefItem
+                  label="Bentuk"
+                  value="Program, sponsor, media partner"
+                />
+                <BriefItem label="Target" value="Pemuda dan masyarakat" />
+                <BriefItem
+                  label="Follow up"
+                  value="Form pengajuan atau WhatsApp"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -182,119 +184,103 @@ function HeroSection() {
   );
 }
 
-function HeroStat({ value, label }: { value: string; label: string }) {
+function BriefItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-[#f4f2ff] px-4 py-3">
-      <p className="text-base font-bold text-[#006399]">{value}</p>
-      <p className="mt-0.5 text-xs font-semibold text-[#3f4851]">{label}</p>
+    <div className="flex items-start justify-between gap-5 rounded-2xl bg-white px-4 py-3">
+      <p className="text-sm font-bold text-[#006399]">{label}</p>
+      <p className="text-right text-sm font-semibold leading-6 text-[#3f4851]">
+        {value}
+      </p>
     </div>
   );
 }
 
-function WhyCollaborateSection() {
-  const items = [
-    {
-      title: "Berbasis komunitas",
-      description:
-        "YOLO bergerak bersama anak muda yang aktif dalam kegiatan positif dan bermanfaat.",
-      icon: Users,
-    },
-    {
-      title: "Fokus pada dampak",
-      description:
-        "Kolaborasi diarahkan untuk memberi manfaat nyata melalui pendidikan, sosial, dan pembinaan.",
-      icon: Target,
-    },
-    {
-      title: "Terbuka untuk banyak bentuk kerja sama",
-      description:
-        "Kolaborasi bisa berupa program, dukungan kegiatan, media partner, sponsorship, atau volunteering.",
-      icon: CheckCircle2,
-    },
-  ];
-
+function CollaborationIntroSection() {
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-[1280px] px-4 py-14 md:px-16 md:py-16">
-        <div className="mb-8">
+      <div className="mx-auto max-w-[1180px] px-4 py-14 md:px-8 md:py-16 lg:px-0">
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
           <SectionHeading
             eyebrow="Why Collaborate"
-            title="Kenapa berkolaborasi dengan YOLO?"
-            description="YOLO menjadi ruang yang menghubungkan semangat pemuda, program sosial, dan kontribusi nyata untuk masyarakat."
+            title="Kolaborasi yang tidak berhenti di acara, tapi berlanjut menjadi dampak."
           />
-        </div>
 
-        <div className="grid gap-5 md:grid-cols-3">
-          {items.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <article
-                key={item.title}
-                className="rounded-[1.75rem] border border-[#e0e0ff] bg-[#fbf8ff] p-6"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#cde5ff] text-[#006399]">
-                  <Icon className="h-6 w-6" strokeWidth={2.3} />
-                </div>
-
-                <h3 className="mt-5 text-lg font-bold text-[#000767]">
-                  {item.title}
-                </h3>
-
-                <p className="mt-3 leading-7 text-[#3f4851]">
-                  {item.description}
-                </p>
-              </article>
-            );
-          })}
+          <div className="grid gap-4 md:grid-cols-3">
+            <IntroCard
+              title="Komunitas aktif"
+              description="YOLO bergerak bersama pemuda yang terlibat dalam kegiatan positif dan sosial."
+            />
+            <IntroCard
+              title="Program relevan"
+              description="Kolaborasi diarahkan ke kebutuhan pendidikan, pembinaan, dan kebermanfaatan."
+            />
+            <IntroCard
+              title="Ruang tumbuh"
+              description="Partner dapat ikut membangun kegiatan yang punya nilai sosial dan pengembangan diri."
+            />
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function IntroCard({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <article className="border-l border-[#d9d9f5] pl-5">
+      <h3 className="text-lg font-bold text-[#000767]">{title}</h3>
+      <p className="mt-3 text-sm leading-7 text-[#3f4851]">{description}</p>
+    </article>
   );
 }
 
 function CollaborationTypesSection() {
   return (
     <section className="bg-[#fbf8ff]">
-      <div className="mx-auto max-w-[1280px] px-4 py-14 md:px-16 md:py-16">
-        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+      <div className="mx-auto max-w-[1180px] px-4 py-14 md:px-8 md:py-16 lg:px-0">
+        <div className="mb-9 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <SectionHeading
             eyebrow="Collaboration Type"
-            title="Bentuk kerja sama yang bisa dilakukan."
-            description="Partner dapat memilih bentuk kolaborasi sesuai kebutuhan program, kapasitas, dan tujuan kegiatan."
+            title="Bentuk kerja sama yang bisa diajukan."
+            description="Pilih bentuk kolaborasi yang paling sesuai dengan kebutuhan, kapasitas, dan tujuan kegiatan."
           />
 
           <Link
-            href={partnershipLink}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/kolaborasi/form"
             className="inline-flex w-fit items-center gap-2 text-sm font-bold text-[#006399] transition hover:text-[#1da1f2]"
           >
-            Diskusi dengan admin
-            <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+            Mulai pengajuan
+            <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
           </Link>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2">
           {collaborationTypes.map((item) => {
             const Icon = item.icon;
 
             return (
               <article
                 key={item.title}
-                className="rounded-[1.5rem] border border-[#e0e0ff] bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70"
+                className="group grid gap-5 rounded-[1.5rem] border border-[#d9d9f5] bg-white p-5 transition hover:-translate-y-0.5 hover:border-[#006399]/25 hover:shadow-lg hover:shadow-[#000767]/5 sm:grid-cols-[auto_1fr]"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#006399] text-white">
-                  <Icon className="h-6 w-6" strokeWidth={2.3} />
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf7ff] text-[#006399] transition group-hover:bg-[#006399] group-hover:text-white">
+                  <Icon className="h-6 w-6" strokeWidth={2.4} />
                 </div>
 
-                <h3 className="mt-5 text-lg font-bold text-[#000767]">
-                  {item.title}
-                </h3>
-
-                <p className="mt-3 text-sm leading-6 text-[#3f4851]">
-                  {item.description}
-                </p>
+                <div>
+                  <h3 className="text-lg font-bold text-[#000767]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-7 text-[#3f4851]">
+                    {item.description}
+                  </p>
+                </div>
               </article>
             );
           })}
@@ -304,46 +290,28 @@ function CollaborationTypesSection() {
   );
 }
 
-function PartnershipFormSection() {
-  return (
-    <section id="form-kolaborasi" className="bg-white">
-      <div className="mx-auto grid max-w-[1280px] gap-8 px-4 py-14 md:px-16 md:py-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-        <SectionHeading
-          eyebrow="Form Kolaborasi"
-          title="Ajukan kerja sama dengan YOLO."
-          description="Isi form berikut agar tim YOLO bisa memahami kebutuhan, bentuk kolaborasi, dan rencana kegiatan yang ingin diajukan."
-        />
-
-        <PartnershipForm />
-      </div>
-    </section>
-  );
-}
-
-function PartnerTargetSection() {
+function PartnerSection() {
   return (
     <section className="bg-white">
-      <div className="mx-auto grid max-w-[1280px] gap-8 px-4 py-14 md:px-16 md:py-16 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+      <div className="mx-auto grid max-w-[1180px] gap-8 px-4 py-14 md:px-8 md:py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:px-0">
         <SectionHeading
           eyebrow="Partner"
-          title="Siapa saja yang bisa berkolaborasi?"
-          description="YOLO terbuka untuk berbagai pihak yang memiliki semangat kebaikan, pendidikan, sosial, dan pengembangan pemuda."
+          title="Terbuka untuk berbagai pihak yang ingin bergerak bersama."
+          description="Kolaborasi bisa datang dari komunitas kecil, sekolah, kampus, brand, media, atau individu yang punya semangat kebaikan."
         />
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="flex flex-wrap gap-3">
           {partnerTargets.map((target) => (
-            <div
+            <span
               key={target}
-              className="flex items-center gap-3 rounded-2xl border border-[#e0e0ff] bg-[#fbf8ff] p-4"
+              className="inline-flex items-center gap-2 rounded-full border border-[#d9d9f5] bg-[#fbf8ff] px-4 py-2 text-sm font-bold text-[#3f4851]"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#91f78e] text-[#00731e]">
-                <CheckCircle2 className="h-5 w-5" strokeWidth={2.5} />
-              </div>
-
-              <p className="text-sm font-semibold leading-6 text-[#3f4851]">
-                {target}
-              </p>
-            </div>
+              <CheckCircle2
+                className="h-4 w-4 text-[#006399]"
+                strokeWidth={2.5}
+              />
+              {target}
+            </span>
           ))}
         </div>
       </div>
@@ -351,33 +319,31 @@ function PartnerTargetSection() {
   );
 }
 
-function StepsSection() {
+function ProcessSection() {
   return (
     <section className="bg-[#fbf8ff]">
-      <div className="mx-auto max-w-[1280px] px-4 py-14 md:px-16 md:py-16">
-        <div className="mb-8">
+      <div className="mx-auto max-w-[1180px] px-4 py-14 md:px-8 md:py-16 lg:px-0">
+        <div className="mb-9">
           <SectionHeading
-            eyebrow="Collaboration Flow"
-            title="Alur pengajuan kolaborasi."
-            description="Supaya kerja sama lebih rapi, YOLO menggunakan alur sederhana dari komunikasi awal sampai evaluasi kegiatan."
+            eyebrow="Flow"
+            title="Alur kerja sama dibuat sederhana dan jelas."
+            description="Supaya tidak berhenti di obrolan, setiap pengajuan diarahkan ke proses yang rapi."
           />
         </div>
 
-        <div className="grid gap-5 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-4">
           {collaborationSteps.map((step, index) => (
             <article
               key={step.title}
-              className="rounded-[1.5rem] border border-[#e0e0ff] bg-white p-5"
+              className="rounded-[1.5rem] border border-[#d9d9f5] bg-white p-5"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#006399] text-sm font-bold text-white">
-                {index + 1}
-              </div>
+              <p className="text-sm font-bold text-[#006399]">0{index + 1}</p>
 
-              <h3 className="mt-5 text-lg font-bold text-[#000767]">
+              <h3 className="mt-4 text-lg font-bold text-[#000767]">
                 {step.title}
               </h3>
 
-              <p className="mt-3 text-sm leading-6 text-[#3f4851]">
+              <p className="mt-3 text-sm leading-7 text-[#3f4851]">
                 {step.description}
               </p>
             </article>
@@ -388,51 +354,42 @@ function StepsSection() {
   );
 }
 
-function ContactCTASection() {
+function FinalCTASection() {
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-[1280px] px-4 py-14 md:px-16 md:py-16">
-        <div className="rounded-[2rem] bg-[#0f1744] p-7 text-white md:p-9">
-          <div className="grid gap-7 md:grid-cols-[1fr_0.75fr] md:items-center">
+      <div className="mx-auto max-w-[1180px] px-4 py-14 md:px-8 md:py-16 lg:px-0">
+        <div className="rounded-[2rem] border border-[#d9d9f5] bg-[#f7fbff] p-6 md:p-8">
+          <div className="grid gap-7 md:grid-cols-[1fr_auto] md:items-center">
             <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[#95ccff]">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
                 Let&apos;s Collaborate
               </p>
 
-              <h2 className="text-2xl font-bold leading-tight md:text-3xl">
-                Punya ide kerja sama dengan YOLO?
+              <h2 className="mt-3 text-2xl font-bold leading-tight text-[#000767] md:text-3xl">
+                Siap mengajukan kerja sama dengan YOLO?
               </h2>
 
-              <p className="mt-3 max-w-2xl leading-7 text-white/70">
-                Ceritakan kebutuhan kolaborasi kamu. Tim YOLO akan membantu
-                mengarahkan bentuk kerja sama yang paling sesuai.
+              <p className="mt-3 max-w-2xl leading-7 text-[#3f4851]">
+                Isi form pengajuan agar tim YOLO bisa memahami ide, kebutuhan,
+                dan bentuk kolaborasi yang ingin dijalankan.
               </p>
             </div>
 
-            <div className="grid gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
               <Link
-                href={partnershipLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
+                href="/kolaborasi/form"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2]"
               >
-                <MessageCircle className="h-4 w-4" strokeWidth={2.3} />
-                Hubungi via WhatsApp
+                Isi Form Pengajuan
+                <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
               </Link>
 
               <Link
                 href={`mailto:${yoloContacts.email}?subject=Ajakan Kolaborasi bersama YOLO`}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#006399]/25 bg-white px-6 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#f4f2ff]"
               >
-                <Mail className="h-4 w-4" strokeWidth={2.3} />
-                Kirim Email
-              </Link>
-
-              <Link
-                href="/about"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10"
-              >
-                Kenali YOLO
+                <Mail className="h-4 w-4" strokeWidth={2.4} />
+                Email YOLO
               </Link>
             </div>
           </div>
@@ -457,14 +414,12 @@ function SectionHeading({
         {eyebrow}
       </p>
 
-      <h2 className="max-w-xl text-2xl font-bold leading-tight text-[#000767] md:text-3xl">
+      <h2 className="max-w-xl text-2xl font-bold leading-tight text-[#000767] md:text-4xl md:leading-[1.14]">
         {title}
       </h2>
 
       {description ? (
-        <p className="mt-3 max-w-xl leading-7 text-[#3f4851]">
-          {description}
-        </p>
+        <p className="mt-4 max-w-xl leading-7 text-[#3f4851]">{description}</p>
       ) : null}
     </div>
   );

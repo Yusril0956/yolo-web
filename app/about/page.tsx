@@ -56,7 +56,6 @@ export default async function AboutPage() {
       <TeamSection activeTeam={activeTeam} demisionerTeam={demisionerTeam} />
       <MembersSection />
       <ProgramsSection />
-      <ContactSection />
 
       <Footer />
     </main>
@@ -425,52 +424,6 @@ function ProgramsSection() {
   );
 }
 
-function ContactSection() {
-  return (
-    <section className="bg-[#fbf8ff]">
-      <div className="mx-auto max-w-[1280px] px-4 py-14 md:px-16 md:py-16">
-        <div className="rounded-[2rem] bg-[#0f1744] p-7 text-white md:p-9">
-          <div className="grid gap-7 md:grid-cols-[1fr_0.75fr] md:items-center">
-            <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-[#95ccff]">
-                Contact
-              </p>
-
-              <h2 className="text-2xl font-bold leading-tight md:text-3xl">
-                Kenali YOLO lebih jauh.
-              </h2>
-
-              <p className="mt-3 max-w-2xl leading-7 text-white/70">
-                Hubungi kami untuk bertanya tentang kegiatan, kolaborasi,
-                relawan, atau informasi komunitas.
-              </p>
-            </div>
-
-            <div className="grid gap-3">
-              <Link
-                href={yoloLinks.askAdmin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#006399] transition hover:bg-[#ffdcbe]"
-              >
-                <MessageCircle className="h-4 w-4" strokeWidth={2.3} />
-                WhatsApp
-              </Link>
-
-              <Link
-                href={`mailto:${yoloContacts.email}`}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10"
-              >
-                <Mail className="h-4 w-4" strokeWidth={2.3} />
-                Email
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function EmptyState({ text }: { text: string }) {
   return (

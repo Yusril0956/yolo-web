@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
 
@@ -33,9 +34,9 @@ export default function PartnershipForm() {
 
   function updateField(
     event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-      | React.ChangeEvent<HTMLSelectElement>,
+      | ChangeEvent<HTMLInputElement>
+      | ChangeEvent<HTMLTextAreaElement>
+      | ChangeEvent<HTMLSelectElement>,
   ) {
     const { name, value } = event.target;
 
@@ -45,7 +46,7 @@ export default function PartnershipForm() {
     }));
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setIsSubmitting(true);
@@ -83,7 +84,7 @@ export default function PartnershipForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[2rem] border border-[#e0e0ff] bg-white p-5 shadow-sm md:p-7"
+      className="rounded-[2rem] border border-[#d9d9f5] bg-white p-5 shadow-sm md:p-7"
     >
       <input
         type="text"
@@ -95,7 +96,22 @@ export default function PartnershipForm() {
         autoComplete="off"
       />
 
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="border-b border-[#d9d9f5] pb-5">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006399]">
+          Detail Pengajuan
+        </p>
+
+        <h2 className="mt-3 text-2xl font-bold text-[#000767]">
+          Ceritakan rencana kolaborasi kamu.
+        </h2>
+
+        <p className="mt-3 text-sm leading-7 text-[#3f4851]">
+          Field bertanda bintang wajib diisi. Gunakan informasi yang jelas agar
+          tim YOLO lebih mudah meninjau pengajuan.
+        </p>
+      </div>
+
+      <div className="mt-6 grid gap-5 md:grid-cols-2">
         <FormField label="Nama Lengkap" htmlFor="name" required>
           <input
             id="name"
@@ -104,12 +120,16 @@ export default function PartnershipForm() {
             value={form.name}
             onChange={updateField}
             required
-            placeholder="Contoh: Yusril Miftahul Rizky"
+            placeholder="Nama lengkap"
             className={inputClassName}
           />
         </FormField>
 
-        <FormField label="Instansi / Komunitas / Brand" htmlFor="organization" required>
+        <FormField
+          label="Instansi / Komunitas / Brand"
+          htmlFor="organization"
+          required
+        >
           <input
             id="organization"
             name="organization"
@@ -117,7 +137,7 @@ export default function PartnershipForm() {
             value={form.organization}
             onChange={updateField}
             required
-            placeholder="Contoh: Komunitas Pemuda Bandung"
+            placeholder="Nama instansi atau komunitas"
             className={inputClassName}
           />
         </FormField>
@@ -148,7 +168,11 @@ export default function PartnershipForm() {
           />
         </FormField>
 
-        <FormField label="Jenis Kolaborasi" htmlFor="collaborationType" required>
+        <FormField
+          label="Jenis Kolaborasi"
+          htmlFor="collaborationType"
+          required
+        >
           <select
             id="collaborationType"
             name="collaborationType"
@@ -201,7 +225,7 @@ export default function PartnershipForm() {
             onChange={updateField}
             required
             rows={5}
-            placeholder="Ceritakan konsep, tujuan, target peserta, dan bentuk kerja sama yang ingin diajukan."
+            placeholder="Ceritakan konsep, tujuan, target peserta, bentuk kerja sama, dan kebutuhan kegiatan."
             className={inputClassName}
           />
         </FormField>
@@ -215,7 +239,7 @@ export default function PartnershipForm() {
             value={form.note}
             onChange={updateField}
             rows={3}
-            placeholder="Opsional. Contoh: kebutuhan tempat, media partner, proposal, atau detail lainnya."
+            placeholder="Opsional. Contoh: kebutuhan tempat, media partner, proposal, konsumsi, atau detail lainnya."
             className={inputClassName}
           />
         </FormField>
@@ -235,15 +259,16 @@ export default function PartnershipForm() {
         </div>
       ) : null}
 
-      <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-7 flex flex-col gap-4 border-t border-[#d9d9f5] pt-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm leading-6 text-[#3f4851]">
-          Pengajuan akan masuk ke admin YOLO untuk ditinjau terlebih dahulu.
+          Dengan mengirim form, pengajuan akan masuk ke database partnership
+          YOLO untuk ditinjau.
         </p>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#006399] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#1da1f2] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isSubmitting ? (
             <>
@@ -286,4 +311,4 @@ function FormField({
 }
 
 const inputClassName =
-  "w-full rounded-2xl border border-[#d9d9f5] bg-[#fbf8ff] px-4 py-3 text-sm font-semibold text-[#000767] outline-none transition placeholder:text-[#8892a0] focus:border-[#006399] focus:bg-white focus:ring-4 focus:ring-[#cde5ff]";
+  "w-full rounded-2xl border border-[#d9d9f5] bg-[#fbf8ff] px-4 py-3 text-sm font-semibold text-[#000767] outline-none transition placeholder:text-[#8a97a5] focus:border-[#006399] focus:bg-white focus:ring-4 focus:ring-[#cde5ff]";
