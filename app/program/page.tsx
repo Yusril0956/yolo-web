@@ -24,8 +24,6 @@ export const metadata: Metadata = {
 
 type Program = (typeof yoloPrograms)[number];
 
-const featuredPrograms = yoloPrograms.slice(0, 4);
-
 const programCategories = Array.from(
   new Set(yoloPrograms.map((program) => program.category)),
 );
@@ -71,7 +69,6 @@ export default function ProgramPage() {
       <Navbar />
 
       <ProgramHero />
-      <FeaturedPrograms />
       <ProgramCategories />
       <ProgramFlow />
       <ProgramCta />
@@ -159,58 +156,6 @@ function HeroStat({ value, label }: { value: string; label: string }) {
   );
 }
 
-function FeaturedPrograms() {
-  return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-[1280px] px-4 py-12 md:px-16 md:py-14">
-        <div className="mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <SectionHeading
-            eyebrow="Program Unggulan"
-            title="Beberapa program utama YOLO."
-            description="Program yang menjadi wajah gerakan YOLO dalam pendidikan, sosial, dan komunitas."
-          />
-
-          <Link
-            href="#semua-program"
-            className="inline-flex w-fit items-center gap-2 text-sm font-bold text-[#006399] transition hover:text-[#1da1f2]"
-          >
-            Lihat semua
-            <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
-          </Link>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {featuredPrograms.map((program) => (
-            <ProgramCard key={program.title} program={program} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ProgramCard({ program }: { program: Program }) {
-  return (
-    <article className="rounded-[1.5rem] border border-[#e0e0ff] bg-[#fbf8ff] p-5 transition hover:-translate-y-1 hover:bg-[#f4f2ff] hover:shadow-lg hover:shadow-slate-200/70">
-      <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#cde5ff] text-[#006399]">
-        {getCategoryIcon(program.category)}
-      </div>
-
-      <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#006399]">
-        {program.category}
-      </p>
-
-      <h3 className="text-lg font-bold leading-tight text-[#000767]">
-        {program.title}
-      </h3>
-
-      <p className="mt-3 text-sm leading-6 text-[#3f4851]">
-        {program.description}
-      </p>
-    </article>
-  );
-}
-
 function ProgramCategories() {
   return (
     <section id="semua-program" className="bg-[#fbf8ff]">
@@ -218,7 +163,7 @@ function ProgramCategories() {
         <div className="mb-8">
           <SectionHeading
             eyebrow="Semua Program"
-            title="Program berdasarkan kategori."
+            title="Daftar program YOLO dalam berbagai bidang."
             description="Daftar program YOLO dikelompokkan agar lebih mudah dibaca dan dipahami."
           />
         </div>

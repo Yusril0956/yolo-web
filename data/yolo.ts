@@ -19,77 +19,87 @@ export const yoloMissions = [
 ];
 
 export const yoloPrograms = [
+  // Pendidikan
   {
     title: "Pemuda Mengajar",
-    category: "Edukasi",
+    category: "Pendidikan",
     description:
-      "Program edukasi yang mengajak pemuda untuk ikut mengajar dan berbagi ilmu kepada anak-anak atau masyarakat sekitar.",
+      "Kegiatan mengajar yang melibatkan generasi muda sebagai relawan untuk memberikan pendampingan belajar, motivasi, dan inspirasi kepada anak-anak di daerah pelosok.",
   },
   {
     title: "Kelas Tumbuh",
-    category: "Edukasi",
+    category: "Pendidikan",
     description:
-      "Ruang belajar dan pengembangan diri untuk membantu peserta tumbuh secara ilmu, karakter, dan keterampilan.",
+      "Kegiatan sharing yang berfokus pada pengembangan keterampilan soft skill.",
   },
   {
-    title: "YOLO Camp",
-    category: "Komunitas",
+    title: "Temu Teman Komunitas",
+    category: "Pendidikan",
     description:
-      "Kegiatan kebersamaan untuk mempererat hubungan anggota, membangun karakter, dan menumbuhkan semangat kolaborasi.",
+      "Ajang berkumpul dan berdiskusi antar komunitas untuk saling berbagi pengalaman, mengevaluasi program kerja, serta mempererat kolaborasi demi kemajuan bersama.",
   },
   {
     title: "Holiday with Stranger",
-    category: "Komunitas",
+    category: "Pendidikan",
     description:
-      "Program kebersamaan dan eksplorasi yang mempertemukan anggota dalam suasana baru untuk membangun relasi positif.",
+      "Program perjalanan atau kegiatan liburan bersama orang-orang baru yang dikemas secara edukatif yang bertujuan memperluas jaringan pertemanan yang positif.",
   },
   {
-    title: "Safari Merdeka",
-    category: "Komunitas",
+    title: "YOLO Camp",
+    category: "Pendidikan",
     description:
-      "Kegiatan sosial dan kebersamaan dengan semangat kemerdekaan, kolaborasi, dan kebermanfaatan.",
+      "Kegiatan berkemah (camping) edukatif yang menantang para pemuda untuk keluar dari zona nyaman melalui berbagai aktivitas kepemimpinan, kerja sama tim, dan petualangan di alam terbuka.",
+  },
+  // Sosial
+  {
+    title: "Berbagi Ta'jil",
+    category: "Sosial",
+    description:
+      "Kegiatan berbagi di bulan Ramadan yaitu berbagi makanan gratis untuk berbuka puasa kepada para pekerja jalanan, musafir, dan masyarakat.",
+  },
+  {
+    title: "Berbagi Bingkisan Lebaran",
+    category: "Sosial",
+    description:
+      "Program penyaluran paket sembako atau hadiah hari raya jelang Idul Fitri untuk berbagi kebahagiaan dengan yang membutuhkan.",
   },
   {
     title: "Jumat Action",
     category: "Sosial",
     description:
-      "Aksi sosial yang dilakukan pada hari Jumat melalui kegiatan berbagi atau bantuan sederhana untuk sekitar.",
+      "Kegiatan berbagi rutin yang diadakan setiap hari Jumat kepada masyarakat yang membutuhkan.",
   },
+  {
+    title: "Safari Merdeka",
+    category: "Sosial",
+    description:
+      "Kegiatan sosial pada hari kemerdekaan ke daerah pelosok melalui berbagi dan perlombaan yang interaktif.",
+  },
+  // Keagamaan
+  {
+    title: "After Shubuh",
+    category: "Keagamaan",
+    description:
+      "Kegiatan sharing setelah Subuh terkait keislaman yang dilaksanakan selama bulan Ramadan.",
+  },
+  {
+    title: "Shodqur",
+    category: "Keagamaan",
+    description:
+      "Kegiatan penghimpunan sedekah kurban yang dialokasikan untuk kurban ke daerah pelosok.",
+  },
+  {
+    title: "Scooter",
+    category: "Keagamaan",
+    description:
+      "Scooter (Sedekah Kulit Terbaik) yaitu kegiatan yang mewadahi masyarakat dalam menyalurkan kulit hewan kurban sekaligus bentuk syiar terkait syariat kurban.",
+  },
+  // Internal
   {
     title: "Training Pengurus & Anggota",
     category: "Internal",
     description:
       "Pelatihan untuk meningkatkan kapasitas pengurus dan anggota agar mampu menjalankan organisasi dengan lebih baik.",
-  },
-  {
-    title: "After Shubuh",
-    category: "Pembinaan",
-    description:
-      "Kegiatan pembinaan dan penguatan spiritual setelah waktu Subuh.",
-  },
-  {
-    title: "Bingkisan Lebaran",
-    category: "Sosial",
-    description:
-      "Program berbagi bingkisan pada momen Lebaran untuk masyarakat atau pihak yang membutuhkan.",
-  },
-  {
-    title: "Berbagi Ta'jil",
-    category: "Sosial",
-    description:
-      "Kegiatan berbagi takjil saat Ramadan sebagai bentuk kepedulian kepada masyarakat sekitar.",
-  },
-  {
-    title: "SCOOTER & ShodQur",
-    category: "Sosial & Keagamaan",
-    description:
-      "Program sosial dan keagamaan yang berfokus pada penyaluran kebaikan dan kegiatan berbasis Al-Quran.",
-  },
-  {
-    title: "Temu Teman Komunitas",
-    category: "Komunitas",
-    description:
-      "Kegiatan silaturahmi dan kolaborasi dengan teman-teman komunitas lainnya.",
   },
   {
     title: "Recruitment Pengurus",

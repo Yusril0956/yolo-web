@@ -15,6 +15,7 @@ import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { getYoloTeamMembers, getYoloMembers } from "@/lib/notion-team";
 import type { YoloTeamMember } from "@/lib/notion-team";
+import MembersDisplaySection from "@/components/MembersDisplaySection";
 
 export const dynamic = "force-dynamic";
 
@@ -285,11 +286,7 @@ function TeamMembersSection({
               </p>
             </div>
 
-            <div className="mb-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {activeMembers.map((member) => (
-                <TeamCard key={member.id} member={member} />
-              ))}
-            </div>
+            <MembersDisplaySection members={activeMembers} />
           </>
         )}
 
