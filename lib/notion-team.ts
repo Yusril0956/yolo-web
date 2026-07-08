@@ -143,3 +143,41 @@ export async function getYoloTeamMembers() {
     return [];
   }
 }
+
+export async function getYoloMembers() {
+  if (!process.env.NOTION_TOKEN || !teamDataSourceId) {
+    return [];
+  }
+
+  try {
+    const response = await withRetry(() =>
+      notion.dataSources.query({
+        data_source_id: teamDataSourceId,
+        filter: {
+          property: "Published",
+          checkbox: {
+            equals: true,
+          },
+        },
+        sorts: [
+          {
+            property: "Urutan",
+            direction: "ascending",
+          },
+        ],
+      }),
+    );
+
+    const members = response.results
+      .filter(isFullPage)
+      .map(mapNotionPageToTeamMember)
+      .filter((member) => member.name !== "Tanpa Nama" && 
+                          member.status.toLowerCase() === "anggota");
+
+    return members;
+  } catch (error) {
+    console.error("Gagal mengambil data Anggota YOLO:", error);
+
+    return [];
+  }
+}

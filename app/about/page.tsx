@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -5,7 +6,6 @@ import SafeImage from "@/components/SafeImage";
 import SectionHeading from "@/components/ui/SectionHeading";
 import {
   yoloLinks,
-  yoloMembers,
   yoloMissions,
   yoloProfile,
   yoloPrograms,
@@ -13,7 +13,7 @@ import {
 } from "@/data/yolo";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { getYoloTeamMembers } from "@/lib/notion-team";
+import { getYoloTeamMembers, getYoloMembers } from "@/lib/notion-team";
 import type { YoloTeamMember } from "@/lib/notion-team";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ function getInitials(name: string) {
 
 export default async function AboutPage() {
   const teamMembers = await getYoloTeamMembers();
+  const allMembers = await getYoloMembers();
 
   const activeTeam = teamMembers.filter(
     (member) => member.status.toLowerCase() === "aktif",
@@ -54,8 +55,11 @@ export default async function AboutPage() {
       <AboutHero />
       <ProfileSection />
       <VisionMissionSection />
-      <TeamSection activeTeam={activeTeam} demisionerTeam={demisionerTeam} />
-      <MembersSection />
+      <TeamMembersSection 
+        activeMembers={allMembers}
+        activeTeam={activeTeam}
+        demisionerTeam={demisionerTeam}
+      />
       <ProgramsSection />
 
       <Footer />
@@ -113,14 +117,16 @@ function AboutHero() {
             <div className="absolute -bottom-5 -left-5 h-20 w-20 rounded-br-[2.5rem] bg-[#df8400]/80" />
 
             <div className="relative overflow-hidden rounded-[2rem] border border-[#e0e0ff] bg-white p-3 shadow-sm">
-              <SafeImage
-                src="https://i.pinimg.com/736x/38/9f/45/389f458263ae257a6b9fce536b9da8c2.jpg"
-                alt="Foto kegiatan YOLO"
-                className="aspect-[16/10] w-full rounded-[1.5rem] object-cover"
-                fallbackClassName="aspect-[16/10] w-full rounded-[1.5rem]"
-                fallbackLabel="Foto kegiatan YOLO"
-                priority
-              />
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[1.5rem]">
+                <Image
+                  src="/images/gambar3.jpeg"
+                  alt="Foto kegiatan YOLO"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                  priority
+                />
+              </div>
 
               <div className="mt-3 grid grid-cols-3 gap-2">
                 <HeroInfo value={yoloProfile.established} label="Berdiri" />
@@ -149,13 +155,15 @@ function ProfileSection() {
     <section className="bg-white">
       <div className="mx-auto grid max-w-[1280px] gap-8 px-4 py-14 md:px-16 md:py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
         <div className="overflow-hidden rounded-[2rem] border border-[#e0e0ff] bg-[#f4f2ff] p-3">
-          <SafeImage
-            src="https://i.pinimg.com/736x/81/5a/65/815a65967682f0c90a7bfd35293ae370.jpg"
-            alt="Foto komunitas YOLO"
-            className="aspect-[4/3] w-full rounded-[1.5rem] object-cover"
-            fallbackClassName="aspect-[4/3] w-full rounded-[1.5rem]"
-            fallbackLabel="Foto komunitas YOLO"
-          />
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.5rem]">
+            <Image
+              src="/images/gambar2.jpeg"
+              alt="Foto komunitas YOLO"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
         </div>
 
         <div>
@@ -229,61 +237,83 @@ function VisionMissionSection() {
   );
 }
 
-function TeamSection({
+function TeamMembersSection({
+  activeMembers,
   activeTeam,
   demisionerTeam,
 }: {
+  activeMembers: YoloTeamMember[];
   activeTeam: YoloTeamMember[];
   demisionerTeam: YoloTeamMember[];
 }) {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1280px] px-4 py-14 md:px-16 md:py-16">
-        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <SectionHeading
-            eyebrow="Our Team"
-            title="Tim inti YOLO."
-            description="Struktur yang mengelola arah komunitas, program, media, relasi publik, dan pengembangan anggota."
-          />
+        {activeTeam.length > 0 && (
+          <>
+            <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <SectionHeading
+                eyebrow="Our Team"
+                title="Tim inti YOLO."
+                description="Struktur yang mengelola arah komunitas, program, media, relasi publik, dan pengembangan anggota."
+              />
 
-          <p className="text-sm font-semibold text-[#006399]">
-            {activeTeam.length} Pengurus Aktif
-          </p>
-        </div>
+              <p className="text-sm font-semibold text-[#006399]">
+                {activeTeam.length} Pengurus Aktif
+              </p>
+            </div>
 
-        {activeTeam.length > 0 ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {activeTeam.map((member) => (
-              <TeamCard key={member.id} member={member} />
-            ))}
-          </div>
-        ) : (
-          <EmptyState text="Data pengurus aktif belum tersedia." />
+            <div className="mb-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {activeTeam.map((member) => (
+                <TeamCard key={member.id} member={member} />
+              ))}
+            </div>
+          </>
         )}
 
-        <div className="mt-14">
-          <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <SectionHeading
-              eyebrow="Demisioner"
-              title="Alumni pengurus YOLO."
-              description="Mereka yang pernah ikut membangun perjalanan YOLO dan menjadi bagian dari perkembangan komunitas."
-            />
+        {activeMembers.length > 0 && (
+          <>
+            <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <SectionHeading
+                eyebrow="Anggota YOLO"
+                title="Anggota aktif yang ikut bergerak."
+                description="Anggota yang membantu kegiatan komunitas, sosial, edukasi, dan dokumentasi."
+              />
 
-            <p className="text-sm font-semibold text-[#006399]">
-              {demisionerTeam.length} Alumni Pengurus
-            </p>
-          </div>
+              <p className="text-sm font-semibold text-[#006399]">
+                {activeMembers.length} Anggota
+              </p>
+            </div>
 
-          {demisionerTeam.length > 0 ? (
+            <div className="mb-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {activeMembers.map((member) => (
+                <TeamCard key={member.id} member={member} />
+              ))}
+            </div>
+          </>
+        )}
+
+        {demisionerTeam.length > 0 && (
+          <>
+            <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <SectionHeading
+                eyebrow="Demisioner"
+                title="Alumni pengurus YOLO."
+                description="Mereka yang pernah ikut membangun perjalanan YOLO dan menjadi bagian dari perkembangan komunitas."
+              />
+
+              <p className="text-sm font-semibold text-[#006399]">
+                {demisionerTeam.length} Alumni Pengurus
+              </p>
+            </div>
+
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {demisionerTeam.map((member) => (
                 <TeamCard key={member.id} member={member} isDemisioner />
               ))}
             </div>
-          ) : (
-            <EmptyState text="Data demisioner belum tersedia." />
-          )}
-        </div>
+          </>
+        )}
       </div>
     </section>
   );
@@ -298,9 +328,7 @@ function TeamCard({
 }) {
   return (
     <article
-      className={`overflow-hidden rounded-[1.5rem] border border-[#e0e0ff] transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70 ${
-        isDemisioner ? "bg-white" : "bg-[#fbf8ff]"
-      }`}
+      className={`overflow-hidden rounded-[1.5rem] border border-[#e0e0ff] transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70 bg-white`}
     >
       <div className="aspect-[4/5] overflow-hidden bg-[#e0e0ff]">
         {member.photo ? (
@@ -362,35 +390,6 @@ function TeamCard({
   );
 }
 
-function MembersSection() {
-  return (
-    <section className="bg-[#fbf8ff]">
-      <div className="mx-auto grid max-w-[1280px] gap-8 px-4 py-14 md:px-16 md:py-16 lg:grid-cols-[0.75fr_1.25fr]">
-        <SectionHeading
-          eyebrow="Anggota YOLO"
-          title="Anggota aktif yang ikut bergerak."
-          description="Selain struktur inti, YOLO juga didukung oleh anggota yang membantu kegiatan komunitas, sosial, edukasi, dan dokumentasi."
-        />
-
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {yoloMembers.map((member) => (
-            <div
-              key={member}
-              className="flex items-center gap-3 rounded-2xl border border-[#e0e0ff] bg-white p-3.5"
-            >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#cde5ff] text-xs font-bold text-[#006399]">
-                {getInitials(member)}
-              </div>
-
-              <p className="text-sm font-semibold text-[#3f4851]">{member}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function ProgramsSection() {
   return (
     <section className="bg-white">
@@ -431,13 +430,3 @@ function ProgramsSection() {
     </section>
   );
 }
-
-
-function EmptyState({ text }: { text: string }) {
-  return (
-    <div className="rounded-[1.5rem] border border-dashed border-[#cbd5e1] bg-[#fbf8ff] p-8 text-center">
-      <p className="text-sm font-semibold text-[#3f4851]">{text}</p>
-    </div>
-  );
-}
-

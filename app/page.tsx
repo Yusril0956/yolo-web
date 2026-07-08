@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
 const featuredPrograms = yoloPrograms.slice(0, 4);
 
 const homeImages = {
-  hero: "https://i.pinimg.com/1200x/b3/81/e5/b381e5956290821742be5fe92c749777.jpg",
+  hero: "/images/gambar1.jpeg",
 };
 
 type Activity = Awaited<ReturnType<typeof getYoloActivities>>[number];
@@ -99,13 +100,16 @@ function HeroSection() {
           <div className="absolute -bottom-4 -left-4 h-20 w-20 rounded-br-[2.5rem] bg-[#df8400]/80" />
 
           <div className="relative overflow-hidden rounded-[2rem] border border-[#e0e0ff] bg-white p-3 shadow-sm">
-            <SafeImage
-              src={homeImages.hero}
-              alt="Foto kegiatan YOLO"
-              className="aspect-[16/10] w-full rounded-[1.5rem] object-cover"
-              fallbackClassName="aspect-[16/10] w-full rounded-[1.5rem]"
-              fallbackLabel="Foto kegiatan YOLO"
-            />
+            <div className="relative h-[280px] w-full overflow-hidden rounded-[1.5rem] sm:h-[340px] lg:h-[430px]">
+              <Image
+                src="/images/home-image.jpeg"
+                alt="Foto kegiatan YOLO"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+                priority
+              />
+            </div>
 
             <div className="mt-3 grid grid-cols-3 gap-2">
               <HeroStat value={yoloProfile.established} label="Berdiri" />
@@ -138,7 +142,8 @@ function ActionSection() {
     },
     {
       title: "Kerja Sama",
-      description: "Ajukan kolaborasi program dengan YOLO atau jadi partnership.",
+      description:
+        "Ajukan kolaborasi program dengan YOLO atau jadi partnership.",
       href: yoloLinks.askAdmin,
       external: true,
       icon: <Handshake className="h-5 w-5" strokeWidth={2.4} />,
